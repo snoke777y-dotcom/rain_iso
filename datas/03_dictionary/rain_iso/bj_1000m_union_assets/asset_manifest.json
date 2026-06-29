@@ -1,0 +1,41 @@
+{
+  "protocol_version": "1.0.0",
+  "asset_version": "2026-06-bj-union-grid-1000m-v1",
+  "algorithm_profile_version": "rain-iso-profile-v1",
+  "city_code": "beijing",
+  "grid_resolution_m": 1000,
+  "grid_rows": 511,
+  "grid_cols": 763,
+  "grid_count": 195802,
+  "valid_grid_count": 195802,
+  "grid_crs": "EPSG:3857",
+  "render_crs": "EPSG:4326",
+  "bbox_projected": [
+    12436000,
+    4652000,
+    13199000,
+    5163000
+  ],
+  "bbox_render": [
+    111.718209,
+    38.512551,
+    118.563088,
+    42.009949
+  ],
+  "files": {
+    "grid_meta": "grid_meta.bin",
+    "grid_mask": "grid_mask.bin",
+    "grid_neighbors": "grid_neighbors.bin",
+    "station_to_grid": "station_to_grid.bin",
+    "station_meta": "station_meta.json",
+    "render_boundary": "render_boundary.geojson"
+  },
+  "checksums": {
+    "grid_meta": "sha256:f5367df413e23ff8deb91f42f0b0941746f5be1297c9b056f1fe7103ef465791",
+    "grid_mask": "sha256:df5c9e1e063c3cb8ab2dad2befe562fe533d71deccfafc2d8340d426261469c6",
+    "grid_neighbors": "sha256:e1ac86327d2f74f174cde8aab9d04757f025234552dcf41b7ac7486391925253",
+    "station_to_grid": "sha256:f63650e96cff735389ea1f61c1ba5fe4d358cbb238619fb1bde9a20d4dd03654",
+    "station_meta": "sha256:80b275408209133d7c47b12469eedddf22775d196a112fbfe6adbc2e850fd62e",
+    "render_boundary": "sha256:b18075e68e8ccce93d7c439b8482216d541888559fdab849348e32ea65b207b8"
+  }
+}

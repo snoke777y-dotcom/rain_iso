@@ -1,0 +1,1142 @@
+{
+  "version": "2026-06-24-fixed-anchor-v1",
+  "generated_at": "2026-06-24",
+  "source_file": "固定锚点清单.xlsx",
+  "station_count": 126,
+  "stations": [
+    {
+      "sequence": 1,
+      "station_id": "FXPP0746",
+      "system_id": "30748100",
+      "station_name": "赵村",
+      "longitude": 116.231,
+      "latitude": 39.583333,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 2,
+      "station_id": "FXPP0755",
+      "system_id": "30827700",
+      "station_name": "天开水库",
+      "longitude": 115.8849,
+      "latitude": 39.6305,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 3,
+      "station_id": "FXPP0772",
+      "system_id": "30700100",
+      "station_name": "官厅水库",
+      "longitude": 115.6114,
+      "latitude": 40.2323,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 4,
+      "station_id": "FXPP0848",
+      "system_id": "30745600",
+      "station_name": "香村营",
+      "longitude": 116.0923,
+      "latitude": 40.4998,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 5,
+      "station_id": "FXPP0846",
+      "system_id": "30745500",
+      "station_name": "永宁",
+      "longitude": 116.1633,
+      "latitude": 40.5296,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 6,
+      "station_id": "FXPP0847",
+      "system_id": "30707200",
+      "station_name": "延庆",
+      "longitude": 116.0089,
+      "latitude": 40.4619,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 7,
+      "station_id": "FXPP0792",
+      "system_id": "30746400",
+      "station_name": "沿河城",
+      "longitude": 115.7259,
+      "latitude": 40.0714,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 8,
+      "station_id": "FXPP0803",
+      "system_id": "30746600",
+      "station_name": "大村",
+      "longitude": 115.8608222,
+      "latitude": 40.11539722,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 9,
+      "station_id": "FXPP0800",
+      "system_id": "30747200",
+      "station_name": "洪水峪",
+      "longitude": 115.6569667,
+      "latitude": 39.90531667,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 10,
+      "station_id": "FXPP0790",
+      "system_id": "30747000",
+      "station_name": "燕家台",
+      "longitude": 115.5657167,
+      "latitude": 40.000725,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 11,
+      "station_id": "FXPP0796",
+      "system_id": "30707600",
+      "station_name": "青白口",
+      "longitude": 115.8275,
+      "latitude": 40.017,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 12,
+      "station_id": "FXPP0791",
+      "system_id": "30700300",
+      "station_name": "雁翅",
+      "longitude": 115.9027,
+      "latitude": 40.0358,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 13,
+      "station_id": "FXPP0793",
+      "system_id": "30747700",
+      "station_name": "上苇甸",
+      "longitude": 115.98835,
+      "latitude": 40.02836667,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 14,
+      "station_id": "FXPP0802",
+      "system_id": "30747600",
+      "station_name": "大台",
+      "longitude": 115.9133056,
+      "latitude": 39.94389167,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 15,
+      "station_id": "FXPP0830",
+      "system_id": "30747850",
+      "station_name": "石景山",
+      "longitude": 116.1343,
+      "latitude": 39.9315,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 16,
+      "station_id": "FXPP0794",
+      "system_id": "30700500",
+      "station_name": "三家店",
+      "longitude": 116.1039,
+      "latitude": 39.9589,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 17,
+      "station_id": "FXPP0767",
+      "system_id": "30700700",
+      "station_name": "卢沟桥水文站",
+      "longitude": 116.2189,
+      "latitude": 39.8598,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 18,
+      "station_id": "FXPP0845",
+      "system_id": "30745800",
+      "station_name": "张山营",
+      "longitude": 115.8462,
+      "latitude": 40.4778,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 19,
+      "station_id": "FXPP0851",
+      "system_id": "30745900",
+      "station_name": "康庄",
+      "longitude": 115.9026,
+      "latitude": 40.3853,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 20,
+      "station_id": "FXPP0801",
+      "system_id": "30746800",
+      "station_name": "杜家庄",
+      "longitude": 115.5,
+      "latitude": 39.94,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 21,
+      "station_id": "FXPP0795",
+      "system_id": "30707400",
+      "station_name": "清水",
+      "longitude": 115.6195,
+      "latitude": 39.944,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 22,
+      "station_id": "FXPP0789",
+      "system_id": "30707501",
+      "station_name": "斋堂水库",
+      "longitude": 115.6853,
+      "latitude": 39.9614,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 23,
+      "station_id": "FXPP0799",
+      "system_id": "30746900",
+      "station_name": "黄塔",
+      "longitude": 115.5544056,
+      "latitude": 39.86120833,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 24,
+      "station_id": "FXPP0798",
+      "system_id": "30747350",
+      "station_name": "军响",
+      "longitude": 115.7714,
+      "latitude": 39.9963,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 25,
+      "station_id": "FXPP6061",
+      "system_id": "30748570",
+      "station_name": "梁各庄",
+      "longitude": 116.38913,
+      "latitude": 39.505767,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 26,
+      "station_id": "FXPP0770",
+      "system_id": "30301300",
+      "station_name": "下堡",
+      "longitude": 116.1204,
+      "latitude": 40.6941,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 27,
+      "station_id": "FXPP0850",
+      "system_id": "30322600",
+      "station_name": "千家店",
+      "longitude": 116.3479,
+      "latitude": 40.6966,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 28,
+      "station_id": "FXPP0778",
+      "system_id": "30324020",
+      "station_name": "碾子",
+      "longitude": 116.4891,
+      "latitude": 40.8034,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 29,
+      "station_id": "FXPP0780",
+      "system_id": "30324600",
+      "station_name": "喇叭沟门",
+      "longitude": 116.6213,
+      "latitude": 40.9028,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 30,
+      "station_id": "FXPP0773",
+      "system_id": "30324700",
+      "station_name": "长哨营",
+      "longitude": 116.7505,
+      "latitude": 40.7137,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 31,
+      "station_id": "FXPP0775",
+      "system_id": "30324800",
+      "station_name": "汤河口",
+      "longitude": 116.6402,
+      "latitude": 40.7351,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 32,
+      "station_id": "FXPP0804",
+      "system_id": "30301600",
+      "station_name": "张家坟",
+      "longitude": 116.7948,
+      "latitude": 40.6139,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 33,
+      "station_id": "FXPP0820",
+      "system_id": "30301400",
+      "station_name": "白河堡水库",
+      "longitude": 116.1783889,
+      "latitude": 40.65216667,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 34,
+      "station_id": "FXPP0815",
+      "system_id": "30325500",
+      "station_name": "番字牌",
+      "longitude": 116.8822278,
+      "latitude": 40.73336389,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 35,
+      "station_id": "FXPP0807",
+      "system_id": "30327950",
+      "station_name": "新城子",
+      "longitude": 117.3312,
+      "latitude": 40.64025,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 36,
+      "station_id": "FXPP0809",
+      "system_id": "30302600",
+      "station_name": "下会",
+      "longitude": 117.1716,
+      "latitude": 40.6098,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 37,
+      "station_id": "FXPP0816",
+      "system_id": "30328550",
+      "station_name": "大城子",
+      "longitude": 117.109,
+      "latitude": 40.3928,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 38,
+      "station_id": "FXPP0812",
+      "system_id": "30301800",
+      "station_name": "密云(白河坝上)",
+      "longitude": 116.8314,
+      "latitude": 40.4765,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 39,
+      "station_id": "FXPP0811",
+      "system_id": "30302800",
+      "station_name": "密云(潮河坝上)",
+      "longitude": 116.9834,
+      "latitude": 40.4483,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 40,
+      "station_id": "FXPP0774",
+      "system_id": "30330300",
+      "station_name": "枣树林",
+      "longitude": 116.6699,
+      "latitude": 40.5217,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 41,
+      "station_id": "FXPP0788",
+      "system_id": "30329700",
+      "station_name": "八道河",
+      "longitude": 116.5763,
+      "latitude": 40.4816,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 42,
+      "station_id": "FXPP0787",
+      "system_id": "30304000",
+      "station_name": "柏崖厂",
+      "longitude": 116.6575,
+      "latitude": 40.4098,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 43,
+      "station_id": "FXPP0785",
+      "system_id": "30304100",
+      "station_name": "北台上水库",
+      "longitude": 116.6823,
+      "latitude": 40.3896,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 44,
+      "station_id": "FXPP0853",
+      "system_id": "30329100",
+      "station_name": "大庄科",
+      "longitude": 116.2339,
+      "latitude": 40.4327,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 45,
+      "station_id": "FXPP0849",
+      "system_id": "30323900",
+      "station_name": "四海",
+      "longitude": 116.414,
+      "latitude": 40.5307,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 46,
+      "station_id": "FXPP0776",
+      "system_id": "30329400",
+      "station_name": "沙峪",
+      "longitude": 116.4658,
+      "latitude": 40.4162,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 47,
+      "station_id": "FXPP0781",
+      "system_id": "30303800",
+      "station_name": "口头",
+      "longitude": 116.5777,
+      "latitude": 40.3576,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 48,
+      "station_id": "FXPP0782",
+      "system_id": "30329200",
+      "station_name": "黄花城",
+      "longitude": 116.3682,
+      "latitude": 40.3884,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 49,
+      "station_id": "FXPP0777",
+      "system_id": "30303700",
+      "station_name": "前辛庄",
+      "longitude": 116.5672,
+      "latitude": 40.3227,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 50,
+      "station_id": "FXPP0783",
+      "system_id": "30303600",
+      "station_name": "怀柔(坝上)",
+      "longitude": 116.6243,
+      "latitude": 40.3122,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 51,
+      "station_id": "FXPP0813",
+      "system_id": "30328900",
+      "station_name": "密云",
+      "longitude": 116.8601,
+      "latitude": 40.3898,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 52,
+      "station_id": "FXPP0834",
+      "system_id": "30330900",
+      "station_name": "唐指山",
+      "longitude": 116.8011,
+      "latitude": 40.2769,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 53,
+      "station_id": "FXPP0831",
+      "system_id": "30331000",
+      "station_name": "杨镇",
+      "longitude": 116.8366,
+      "latitude": 40.1511,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 54,
+      "station_id": "FXPP0836",
+      "system_id": "30330700",
+      "station_name": "顺义",
+      "longitude": 116.6654,
+      "latitude": 40.1222,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 55,
+      "station_id": "FXPP0835",
+      "system_id": "30300100",
+      "station_name": "苏庄",
+      "longitude": 116.7545,
+      "latitude": 40.0636,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 56,
+      "station_id": "FXPP0786",
+      "system_id": "30323700",
+      "station_name": "宝山寺",
+      "longitude": 116.5696,
+      "latitude": 40.6953,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 57,
+      "station_id": "FXPP0832",
+      "system_id": "30330650",
+      "station_name": "向阳闸",
+      "longitude": 116.6795,
+      "latitude": 40.1704,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 58,
+      "station_id": "FXPP0805",
+      "system_id": "30303000",
+      "station_name": "遥桥峪水库",
+      "longitude": 117.3851,
+      "latitude": 40.6363,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 59,
+      "station_id": "FXPP0814",
+      "system_id": "30327830",
+      "station_name": "花园",
+      "longitude": 117.4869,
+      "latitude": 40.6507,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 60,
+      "station_id": "FXPP0771",
+      "system_id": "30327860",
+      "station_name": "涝洼",
+      "longitude": 117.4677,
+      "latitude": 40.6886,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 61,
+      "station_id": "FXPP0784",
+      "system_id": "30304200",
+      "station_name": "大水峪水库",
+      "longitude": 116.6877,
+      "latitude": 40.4537,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 62,
+      "station_id": "FXPP0818",
+      "system_id": "30303300",
+      "station_name": "北山下",
+      "longitude": 117.059,
+      "latitude": 40.3863,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 63,
+      "station_id": "FXPP0810",
+      "system_id": "30303400",
+      "station_name": "沙厂水库",
+      "longitude": 117.0401,
+      "latitude": 40.3879,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 64,
+      "station_id": "FXPP0808",
+      "system_id": "30328420",
+      "station_name": "下栅子",
+      "longitude": 117.1614222,
+      "latitude": 40.41941111,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 65,
+      "station_id": "FXPP0806",
+      "system_id": "30325600",
+      "station_name": "阳坡地",
+      "longitude": 116.9822,
+      "latitude": 40.6642,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 66,
+      "station_id": "FXPP0819",
+      "system_id": "30302100",
+      "station_name": "半城子水库",
+      "longitude": 117.0303,
+      "latitude": 40.6319,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 67,
+      "station_id": "FXPP0817",
+      "system_id": "30328250",
+      "station_name": "北庄",
+      "longitude": 117.1742639,
+      "latitude": 40.50835833,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 68,
+      "station_id": "FXPP0779",
+      "system_id": "30325000",
+      "station_name": "琉璃庙",
+      "longitude": 116.65,
+      "latitude": 40.6287,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 69,
+      "station_id": "FXPP0821",
+      "system_id": "30421400",
+      "station_name": "镇罗营",
+      "longitude": 117.1428778,
+      "latitude": 40.3445,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 70,
+      "station_id": "FXPP0822",
+      "system_id": "30421700",
+      "station_name": "峪口",
+      "longitude": 117.0076333,
+      "latitude": 40.18196667,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 71,
+      "station_id": "FXPP0824",
+      "system_id": "30401200",
+      "station_name": "桑园",
+      "longitude": 117.3685111,
+      "latitude": 40.16166944,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 72,
+      "station_id": "FXPP0826",
+      "system_id": "30420700",
+      "station_name": "将军关",
+      "longitude": 117.3136972,
+      "latitude": 40.27007222,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 73,
+      "station_id": "FXPP0828",
+      "system_id": "30401400",
+      "station_name": "海子水库",
+      "longitude": 117.3036,
+      "latitude": 40.1855,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 74,
+      "station_id": "FXPP0827",
+      "system_id": "30402100",
+      "station_name": "黄松峪水库",
+      "longitude": 117.2520556,
+      "latitude": 40.24086111,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 75,
+      "station_id": "FXPP0825",
+      "system_id": "30421300",
+      "station_name": "平谷",
+      "longitude": 117.123,
+      "latitude": 40.1456,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 76,
+      "station_id": "FXPP0823",
+      "system_id": "30402200",
+      "station_name": "西峪水库",
+      "longitude": 117.0901111,
+      "latitude": 40.31016667,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 77,
+      "station_id": "FXPP0829",
+      "system_id": "30421000",
+      "station_name": "刁窝",
+      "longitude": 117.25115,
+      "latitude": 40.27520278,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 78,
+      "station_id": "FXPP0837",
+      "system_id": "30422100",
+      "station_name": "大孙各庄",
+      "longitude": 116.9203,
+      "latitude": 40.0875,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 79,
+      "station_id": "FXPP0736",
+      "system_id": "30503200",
+      "station_name": "王家园水库",
+      "longitude": 116.0043,
+      "latitude": 40.1987,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 80,
+      "station_id": "FXPP0734",
+      "system_id": "30521700",
+      "station_name": "阳坊",
+      "longitude": 116.1349,
+      "latitude": 40.162,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 81,
+      "station_id": "FXPP0735",
+      "system_id": "30521300",
+      "station_name": "响潭水库",
+      "longitude": 116.0937667,
+      "latitude": 40.247625,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 82,
+      "station_id": "FXPP0852",
+      "system_id": "30520840",
+      "station_name": "碓臼峪",
+      "longitude": 116.1167,
+      "latitude": 40.3577,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 83,
+      "station_id": "FXPP0740",
+      "system_id": "30520950",
+      "station_name": "德胜口",
+      "longitude": 116.1868,
+      "latitude": 40.3017,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 84,
+      "station_id": "FXPP0738",
+      "system_id": "30503400",
+      "station_name": "十三陵水库",
+      "longitude": 116.2697,
+      "latitude": 40.2498,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 85,
+      "station_id": "FXPP0733",
+      "system_id": "30521000",
+      "station_name": "长陵",
+      "longitude": 116.2559,
+      "latitude": 40.3014,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 86,
+      "station_id": "FXPP0739",
+      "system_id": "30522000",
+      "station_name": "沙河闸",
+      "longitude": 116.3385,
+      "latitude": 40.1351,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 87,
+      "station_id": "FXPP0737",
+      "system_id": "30503500",
+      "station_name": "桃峪口水库",
+      "longitude": 116.4488,
+      "latitude": 40.2344,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 88,
+      "station_id": "FXPP0769",
+      "system_id": "30523650",
+      "station_name": "海淀",
+      "longitude": 116.303708,
+      "latitude": 39.963249,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 89,
+      "station_id": "FXPP0768",
+      "system_id": "30521900",
+      "station_name": "温泉",
+      "longitude": 116.162,
+      "latitude": 40.055,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 90,
+      "station_id": "FXPP0841",
+      "system_id": "30503100",
+      "station_name": "北关拦河闸",
+      "longitude": 116.6686,
+      "latitude": 39.9279,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 91,
+      "station_id": "FXPP0833",
+      "system_id": "30522850",
+      "station_name": "天竺",
+      "longitude": 116.58,
+      "latitude": 40.0595,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 92,
+      "station_id": "FXPP0842",
+      "system_id": "30524300",
+      "station_name": "马驹桥",
+      "longitude": 116.5561,
+      "latitude": 39.7689,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 93,
+      "station_id": "FXPP0839",
+      "system_id": "30526200",
+      "station_name": "永乐店",
+      "longitude": 116.7917,
+      "latitude": 39.7106,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 94,
+      "station_id": "FXPP4796",
+      "system_id": "30504000",
+      "station_name": "张家湾",
+      "longitude": 116.7078,
+      "latitude": 39.787,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 95,
+      "station_id": "FXPP0840",
+      "system_id": "30501700",
+      "station_name": "杨洼闸",
+      "longitude": 116.9115,
+      "latitude": 39.7714,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 96,
+      "station_id": "FXPP0750",
+      "system_id": "30526700",
+      "station_name": "半壁店",
+      "longitude": 116.3863611,
+      "latitude": 39.63030556,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 97,
+      "station_id": "FXPP0748",
+      "system_id": "30526500",
+      "station_name": "黄村",
+      "longitude": 116.3423,
+      "latitude": 39.7431,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 98,
+      "station_id": "FXPP0749",
+      "system_id": "30504300",
+      "station_name": "凤河营",
+      "longitude": 116.6947,
+      "latitude": 39.6159,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 99,
+      "station_id": "FXPP0742",
+      "system_id": "30503700",
+      "station_name": "乐家花园",
+      "longitude": 116.4684,
+      "latitude": 39.9047,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 100,
+      "station_id": "FXPP0752",
+      "system_id": "30523850",
+      "station_name": "东直门",
+      "longitude": 116.4346,
+      "latitude": 39.943,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 101,
+      "station_id": "FXPP0843",
+      "system_id": "30523800",
+      "station_name": "松林闸",
+      "longitude": 116.379,
+      "latitude": 39.9502,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 102,
+      "station_id": "FXPP0844",
+      "system_id": "30523900",
+      "station_name": "右安门",
+      "longitude": 116.3551,
+      "latitude": 39.8694,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 103,
+      "station_id": "FXPP0751",
+      "system_id": "30523930",
+      "station_name": "天安门",
+      "longitude": 116.4036,
+      "latitude": 39.9086,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 104,
+      "station_id": "FXPP0745",
+      "system_id": "30523960",
+      "station_name": "龙潭闸",
+      "longitude": 116.445,
+      "latitude": 39.881,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 105,
+      "station_id": "FXPP0744",
+      "system_id": "30523050",
+      "station_name": "朝阳",
+      "longitude": 116.4716,
+      "latitude": 39.9329,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 106,
+      "station_id": "FXPP0741",
+      "system_id": "30503600",
+      "station_name": "羊坊闸",
+      "longitude": 116.4091,
+      "latitude": 40.0418,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 107,
+      "station_id": "FXPP0743",
+      "system_id": "30524200",
+      "station_name": "高碑店闸",
+      "longitude": 116.5301,
+      "latitude": 39.9086,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 108,
+      "station_id": "FXPP0753",
+      "system_id": "30805600",
+      "station_name": "张坊",
+      "longitude": 115.693,
+      "latitude": 39.577,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 109,
+      "station_id": "FXPP0758",
+      "system_id": "30823700",
+      "station_name": "蒲洼",
+      "longitude": 115.5294028,
+      "latitude": 39.73234167,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 110,
+      "station_id": "FXPP0756",
+      "system_id": "30827000",
+      "station_name": "史家营",
+      "longitude": 115.6638056,
+      "latitude": 39.85775,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 111,
+      "station_id": "FXPP0765",
+      "system_id": "30827100",
+      "station_name": "大安山",
+      "longitude": 115.7909,
+      "latitude": 39.8852,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 112,
+      "station_id": "FXPP0760",
+      "system_id": "30804501",
+      "station_name": "漫水河",
+      "longitude": 115.9226,
+      "latitude": 39.8148,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 113,
+      "station_id": "FXPP0766",
+      "system_id": "30805100",
+      "station_name": "崇青水库",
+      "longitude": 116.0750278,
+      "latitude": 39.78388889,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 114,
+      "station_id": "FXPP0797",
+      "system_id": "30827800",
+      "station_name": "南辛房",
+      "longitude": 116.015,
+      "latitude": 39.8956,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 115,
+      "station_id": "FXPP0764",
+      "system_id": "30827500",
+      "station_name": "房山",
+      "longitude": 115.9887,
+      "latitude": 39.7031,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 116,
+      "station_id": "FXPP0762",
+      "system_id": "30828000",
+      "station_name": "良乡",
+      "longitude": 116.1471,
+      "latitude": 39.7356,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 117,
+      "station_id": "FXPP0761",
+      "system_id": "30827600",
+      "station_name": "琉璃河",
+      "longitude": 116.0245833,
+      "latitude": 39.60944722,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 118,
+      "station_id": "FXPP0757",
+      "system_id": "30823800",
+      "station_name": "十渡",
+      "longitude": 115.5888,
+      "latitude": 39.6407,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 119,
+      "station_id": "FXPP0759",
+      "system_id": "30827200",
+      "station_name": "南窖",
+      "longitude": 115.8451,
+      "latitude": 39.7663,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 120,
+      "station_id": "FXPP0754",
+      "system_id": "30826900",
+      "station_name": "霞云岭",
+      "longitude": 115.7404472,
+      "latitude": 39.72790556,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 121,
+      "station_id": "FXPP0763",
+      "system_id": "30828030",
+      "station_name": "葫芦垡",
+      "longitude": 116.2138,
+      "latitude": 39.7041,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 122,
+      "station_id": "FXPP4698",
+      "system_id": "30523300",
+      "station_name": "徐辛庄",
+      "longitude": 116.682519,
+      "latitude": 39.98445,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 123,
+      "station_id": "FXPP4762",
+      "system_id": "30523420",
+      "station_name": "行政办公区",
+      "longitude": 116.7205,
+      "latitude": 39.9022,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 124,
+      "station_id": "FXPP4798",
+      "system_id": "30526095",
+      "station_name": "小松垡",
+      "longitude": 116.630142,
+      "latitude": 39.727622,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 125,
+      "station_id": "FXPP4799",
+      "system_id": "30524360",
+      "station_name": "环球影城",
+      "longitude": 116.658703,
+      "latitude": 39.872797,
+      "anchor_type": "fixed"
+    },
+    {
+      "sequence": 126,
+      "station_id": "FXPP4811",
+      "system_id": "30748595",
+      "station_name": "礼贤",
+      "longitude": 116.436177,
+      "latitude": 39.558193,
+      "anchor_type": "fixed"
+    }
+  ]
+}
