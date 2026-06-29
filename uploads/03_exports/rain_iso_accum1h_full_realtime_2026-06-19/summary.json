@@ -1,0 +1,157 @@
+{
+  "sourcePath": "/Users/snoke/Documents/2.慧图科技/1.项目管理/北京水务局/cc客供资料/huitu_tool/rain_iso/datas/01_raw/realtime_1h_response.json",
+  "assetDirectory": "/Users/snoke/Documents/2.慧图科技/1.项目管理/北京水务局/cc客供资料/huitu_tool/rain_iso/datas/03_dictionary/rain_iso/bj_1000m_union_assets",
+  "frameCount": 15,
+  "frames": [
+    {
+      "frameKey": "accum_1h_step|2026-06-19T09:00:00+08:00",
+      "frameTime": "2026-06-19T09:00:00+08:00",
+      "maxValue": 3,
+      "renderableGridCount": 22397,
+      "hardAnchorCount": 26,
+      "softObsCount": 16,
+      "ordinaryOnlyMode": false,
+      "bmpPath": "/Users/snoke/Documents/2.慧图科技/1.项目管理/北京水务局/cc客供资料/huitu_tool/rain_iso/uploads/02_charts/rain_iso_accum1h_full_realtime_2026-06-19/accum_1h_step_2026-06-19T09-00-00-08-00.bmp"
+    },
+    {
+      "frameKey": "accum_1h_step|2026-06-19T10:00:00+08:00",
+      "frameTime": "2026-06-19T10:00:00+08:00",
+      "maxValue": 39.599998474121094,
+      "renderableGridCount": 26674,
+      "hardAnchorCount": 27,
+      "softObsCount": 79,
+      "ordinaryOnlyMode": false,
+      "bmpPath": "/Users/snoke/Documents/2.慧图科技/1.项目管理/北京水务局/cc客供资料/huitu_tool/rain_iso/uploads/02_charts/rain_iso_accum1h_full_realtime_2026-06-19/accum_1h_step_2026-06-19T10-00-00-08-00.bmp"
+    },
+    {
+      "frameKey": "accum_1h_step|2026-06-19T11:00:00+08:00",
+      "frameTime": "2026-06-19T11:00:00+08:00",
+      "maxValue": 40.099998474121094,
+      "renderableGridCount": 32661,
+      "hardAnchorCount": 27,
+      "softObsCount": 278,
+      "ordinaryOnlyMode": false,
+      "bmpPath": "/Users/snoke/Documents/2.慧图科技/1.项目管理/北京水务局/cc客供资料/huitu_tool/rain_iso/uploads/02_charts/rain_iso_accum1h_full_realtime_2026-06-19/accum_1h_step_2026-06-19T11-00-00-08-00.bmp"
+    },
+    {
+      "frameKey": "accum_1h_step|2026-06-19T12:00:00+08:00",
+      "frameTime": "2026-06-19T12:00:00+08:00",
+      "maxValue": 40.099998474121094,
+      "renderableGridCount": 41394,
+      "hardAnchorCount": 26,
+      "softObsCount": 593,
+      "ordinaryOnlyMode": false,
+      "bmpPath": "/Users/snoke/Documents/2.慧图科技/1.项目管理/北京水务局/cc客供资料/huitu_tool/rain_iso/uploads/02_charts/rain_iso_accum1h_full_realtime_2026-06-19/accum_1h_step_2026-06-19T12-00-00-08-00.bmp"
+    },
+    {
+      "frameKey": "accum_1h_step|2026-06-19T13:00:00+08:00",
+      "frameTime": "2026-06-19T13:00:00+08:00",
+      "maxValue": 51.29999923706055,
+      "renderableGridCount": 48529,
+      "hardAnchorCount": 26,
+      "softObsCount": 1083,
+      "ordinaryOnlyMode": false,
+      "bmpPath": "/Users/snoke/Documents/2.慧图科技/1.项目管理/北京水务局/cc客供资料/huitu_tool/rain_iso/uploads/02_charts/rain_iso_accum1h_full_realtime_2026-06-19/accum_1h_step_2026-06-19T13-00-00-08-00.bmp"
+    },
+    {
+      "frameKey": "accum_1h_step|2026-06-19T14:00:00+08:00",
+      "frameTime": "2026-06-19T14:00:00+08:00",
+      "maxValue": 56.20000076293945,
+      "renderableGridCount": 52821,
+      "hardAnchorCount": 26,
+      "softObsCount": 1720,
+      "ordinaryOnlyMode": false,
+      "bmpPath": "/Users/snoke/Documents/2.慧图科技/1.项目管理/北京水务局/cc客供资料/huitu_tool/rain_iso/uploads/02_charts/rain_iso_accum1h_full_realtime_2026-06-19/accum_1h_step_2026-06-19T14-00-00-08-00.bmp"
+    },
+    {
+      "frameKey": "accum_1h_step|2026-06-19T15:00:00+08:00",
+      "frameTime": "2026-06-19T15:00:00+08:00",
+      "maxValue": 125.5999984741211,
+      "renderableGridCount": 60140,
+      "hardAnchorCount": 29,
+      "softObsCount": 2156,
+      "ordinaryOnlyMode": false,
+      "bmpPath": "/Users/snoke/Documents/2.慧图科技/1.项目管理/北京水务局/cc客供资料/huitu_tool/rain_iso/uploads/02_charts/rain_iso_accum1h_full_realtime_2026-06-19/accum_1h_step_2026-06-19T15-00-00-08-00.bmp"
+    },
+    {
+      "frameKey": "accum_1h_step|2026-06-19T16:00:00+08:00",
+      "frameTime": "2026-06-19T16:00:00+08:00",
+      "maxValue": 141.3000030517578,
+      "renderableGridCount": 61288,
+      "hardAnchorCount": 27,
+      "softObsCount": 2405,
+      "ordinaryOnlyMode": false,
+      "bmpPath": "/Users/snoke/Documents/2.慧图科技/1.项目管理/北京水务局/cc客供资料/huitu_tool/rain_iso/uploads/02_charts/rain_iso_accum1h_full_realtime_2026-06-19/accum_1h_step_2026-06-19T16-00-00-08-00.bmp"
+    },
+    {
+      "frameKey": "accum_1h_step|2026-06-19T17:00:00+08:00",
+      "frameTime": "2026-06-19T17:00:00+08:00",
+      "maxValue": 144,
+      "renderableGridCount": 61758,
+      "hardAnchorCount": 27,
+      "softObsCount": 2639,
+      "ordinaryOnlyMode": false,
+      "bmpPath": "/Users/snoke/Documents/2.慧图科技/1.项目管理/北京水务局/cc客供资料/huitu_tool/rain_iso/uploads/02_charts/rain_iso_accum1h_full_realtime_2026-06-19/accum_1h_step_2026-06-19T17-00-00-08-00.bmp"
+    },
+    {
+      "frameKey": "accum_1h_step|2026-06-19T18:00:00+08:00",
+      "frameTime": "2026-06-19T18:00:00+08:00",
+      "maxValue": 144.3000030517578,
+      "renderableGridCount": 61843,
+      "hardAnchorCount": 27,
+      "softObsCount": 2696,
+      "ordinaryOnlyMode": false,
+      "bmpPath": "/Users/snoke/Documents/2.慧图科技/1.项目管理/北京水务局/cc客供资料/huitu_tool/rain_iso/uploads/02_charts/rain_iso_accum1h_full_realtime_2026-06-19/accum_1h_step_2026-06-19T18-00-00-08-00.bmp"
+    },
+    {
+      "frameKey": "accum_1h_step|2026-06-19T19:00:00+08:00",
+      "frameTime": "2026-06-19T19:00:00+08:00",
+      "maxValue": 144.60000610351562,
+      "renderableGridCount": 61872,
+      "hardAnchorCount": 27,
+      "softObsCount": 2712,
+      "ordinaryOnlyMode": false,
+      "bmpPath": "/Users/snoke/Documents/2.慧图科技/1.项目管理/北京水务局/cc客供资料/huitu_tool/rain_iso/uploads/02_charts/rain_iso_accum1h_full_realtime_2026-06-19/accum_1h_step_2026-06-19T19-00-00-08-00.bmp"
+    },
+    {
+      "frameKey": "accum_1h_step|2026-06-19T20:00:00+08:00",
+      "frameTime": "2026-06-19T20:00:00+08:00",
+      "maxValue": 144.60000610351562,
+      "renderableGridCount": 61872,
+      "hardAnchorCount": 27,
+      "softObsCount": 2714,
+      "ordinaryOnlyMode": false,
+      "bmpPath": "/Users/snoke/Documents/2.慧图科技/1.项目管理/北京水务局/cc客供资料/huitu_tool/rain_iso/uploads/02_charts/rain_iso_accum1h_full_realtime_2026-06-19/accum_1h_step_2026-06-19T20-00-00-08-00.bmp"
+    },
+    {
+      "frameKey": "accum_1h_step|2026-06-19T21:00:00+08:00",
+      "frameTime": "2026-06-19T21:00:00+08:00",
+      "maxValue": 144.60000610351562,
+      "renderableGridCount": 61872,
+      "hardAnchorCount": 27,
+      "softObsCount": 2721,
+      "ordinaryOnlyMode": false,
+      "bmpPath": "/Users/snoke/Documents/2.慧图科技/1.项目管理/北京水务局/cc客供资料/huitu_tool/rain_iso/uploads/02_charts/rain_iso_accum1h_full_realtime_2026-06-19/accum_1h_step_2026-06-19T21-00-00-08-00.bmp"
+    },
+    {
+      "frameKey": "accum_1h_step|2026-06-19T22:00:00+08:00",
+      "frameTime": "2026-06-19T22:00:00+08:00",
+      "maxValue": 144.60000610351562,
+      "renderableGridCount": 61872,
+      "hardAnchorCount": 27,
+      "softObsCount": 2726,
+      "ordinaryOnlyMode": false,
+      "bmpPath": "/Users/snoke/Documents/2.慧图科技/1.项目管理/北京水务局/cc客供资料/huitu_tool/rain_iso/uploads/02_charts/rain_iso_accum1h_full_realtime_2026-06-19/accum_1h_step_2026-06-19T22-00-00-08-00.bmp"
+    },
+    {
+      "frameKey": "accum_1h_step|2026-06-19T23:00:00+08:00",
+      "frameTime": "2026-06-19T23:00:00+08:00",
+      "maxValue": 144.60000610351562,
+      "renderableGridCount": 61872,
+      "hardAnchorCount": 27,
+      "softObsCount": 2727,
+      "ordinaryOnlyMode": false,
+      "bmpPath": "/Users/snoke/Documents/2.慧图科技/1.项目管理/北京水务局/cc客供资料/huitu_tool/rain_iso/uploads/02_charts/rain_iso_accum1h_full_realtime_2026-06-19/accum_1h_step_2026-06-19T23-00-00-08-00.bmp"
+    }
+  ]
+}

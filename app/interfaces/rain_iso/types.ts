@@ -167,6 +167,12 @@ export type FrameReadyResponse = {
     task_id: string;
     frame_key: string;
     frame_result: FrameResult;
+    rendered_frame?: {
+      frame_key: string;
+      width: number;
+      height: number;
+      pixels: Uint8ClampedArray;
+    };
   };
 };
 
@@ -258,6 +264,12 @@ export type FrameReadyEvent = {
   taskId: string;
   frameKey: string;
   frameResult: FrameResult;
+  renderedFrame?: {
+    frameKey: string;
+    width: number;
+    height: number;
+    pixels: Uint8ClampedArray;
+  };
 };
 
 export type TaskRunResult = {

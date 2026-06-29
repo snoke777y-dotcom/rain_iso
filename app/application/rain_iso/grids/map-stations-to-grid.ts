@@ -7,13 +7,18 @@ export type MappedStation = ClassifiedStation & {
 
 export function mapStationsToGrid(
   stations: ClassifiedStation[],
-  options: Pick<RainIsoAssetBundle, "stationMeta" | "stationToGrid">
+  options: Pick<RainIsoAssetBundle, "stationMeta" | "stationToGrid"> & {
+    gridIdByStationId?: ReadonlyMap<string, number>;
+  }
 ): MappedStation[] {
-  const gridIdByStationId = new Map<string, number>();
-
-  options.stationMeta.stations.forEach((station, index) => {
-    gridIdByStationId.set(String(station.station_id), options.stationToGrid[index]);
-  });
+  const gridIdByStationId =
+    options.gridIdByStationId ??
+    new Map<string, number>(
+      options.stationMeta.stations.map((station, index) => [
+        String(station.station_id),
+        options.stationToGrid[index]
+      ])
+    );
 
   return stations.flatMap((station) => {
     const gridId = gridIdByStationId.get(station.stationId);

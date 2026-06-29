@@ -1,4 +1,4 @@
-var M = Uint8Array, $ = Uint16Array, rr = Int32Array, Ee = new M([
+var b = Uint8Array, W = Uint16Array, sr = Int32Array, Ve = new b([
   0,
   0,
   0,
@@ -33,7 +33,7 @@ var M = Uint8Array, $ = Uint16Array, rr = Int32Array, Ee = new M([
   0,
   /* impossible */
   0
-]), Pe = new M([
+]), De = new b([
   0,
   0,
   0,
@@ -67,65 +67,65 @@ var M = Uint8Array, $ = Uint16Array, rr = Int32Array, Ee = new M([
   /* unused */
   0,
   0
-]), tr = new M([16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15]), Ge = function(e, r) {
-  for (var t = new $(31), n = 0; n < 31; ++n)
-    t[n] = r += 1 << e[n - 1];
-  for (var i = new rr(t[30]), n = 1; n < 30; ++n)
-    for (var a = t[n]; a < t[n + 1]; ++a)
-      i[a] = a - t[n] << 5 | n;
-  return { b: t, r: i };
-}, Oe = Ge(Ee, 2), De = Oe.b, nr = Oe.r;
-De[28] = 258, nr[258] = 28;
-var ar = Ge(Pe, 0), ir = ar.b, de = new $(32768);
+]), cr = new b([16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15]), Le = function(e, r) {
+  for (var n = new W(31), t = 0; t < 31; ++t)
+    n[t] = r += 1 << e[t - 1];
+  for (var i = new sr(n[30]), t = 1; t < 30; ++t)
+    for (var a = n[t]; a < n[t + 1]; ++a)
+      i[a] = a - n[t] << 5 | t;
+  return { b: n, r: i };
+}, Ue = Le(Ve, 2), qe = Ue.b, lr = Ue.r;
+qe[28] = 258, lr[258] = 28;
+var or = Le(De, 0), dr = or.b, ue = new W(32768);
 for (var y = 0; y < 32768; ++y) {
-  var P = (y & 43690) >> 1 | (y & 21845) << 1;
-  P = (P & 52428) >> 2 | (P & 13107) << 2, P = (P & 61680) >> 4 | (P & 3855) << 4, de[y] = ((P & 65280) >> 8 | (P & 255) << 8) >> 1;
+  var O = (y & 43690) >> 1 | (y & 21845) << 1;
+  O = (O & 52428) >> 2 | (O & 13107) << 2, O = (O & 61680) >> 4 | (O & 3855) << 4, ue[y] = ((O & 65280) >> 8 | (O & 255) << 8) >> 1;
 }
-var z = (function(e, r, t) {
-  for (var n = e.length, i = 0, a = new $(r); i < n; ++i)
+var H = (function(e, r, n) {
+  for (var t = e.length, i = 0, a = new W(r); i < t; ++i)
     e[i] && ++a[e[i] - 1];
-  var s = new $(r);
+  var s = new W(r);
   for (i = 1; i < r; ++i)
     s[i] = s[i - 1] + a[i - 1] << 1;
   var c;
-  if (t) {
-    c = new $(1 << r);
-    var l = 15 - r;
-    for (i = 0; i < n; ++i)
+  if (n) {
+    c = new W(1 << r);
+    var o = 15 - r;
+    for (i = 0; i < t; ++i)
       if (e[i])
-        for (var d = i << 4 | e[i], f = r - e[i], o = s[e[i] - 1]++ << f, u = o | (1 << f) - 1; o <= u; ++o)
-          c[de[o] >> l] = d;
+        for (var u = i << 4 | e[i], f = r - e[i], l = s[e[i] - 1]++ << f, d = l | (1 << f) - 1; l <= d; ++l)
+          c[ue[l] >> o] = u;
   } else
-    for (c = new $(n), i = 0; i < n; ++i)
-      e[i] && (c[i] = de[s[e[i] - 1]++] >> 15 - e[i]);
+    for (c = new W(t), i = 0; i < t; ++i)
+      e[i] && (c[i] = ue[s[e[i] - 1]++] >> 15 - e[i]);
   return c;
-}), X = new M(288);
+}), Y = new b(288);
 for (var y = 0; y < 144; ++y)
-  X[y] = 8;
+  Y[y] = 8;
 for (var y = 144; y < 256; ++y)
-  X[y] = 9;
+  Y[y] = 9;
 for (var y = 256; y < 280; ++y)
-  X[y] = 7;
+  Y[y] = 7;
 for (var y = 280; y < 288; ++y)
-  X[y] = 8;
-var Le = new M(32);
+  Y[y] = 8;
+var pe = new b(32);
 for (var y = 0; y < 32; ++y)
-  Le[y] = 5;
-var sr = /* @__PURE__ */ z(X, 9, 1), or = /* @__PURE__ */ z(Le, 5, 1), ae = function(e) {
-  for (var r = e[0], t = 1; t < e.length; ++t)
-    e[t] > r && (r = e[t]);
+  pe[y] = 5;
+var ur = /* @__PURE__ */ H(Y, 9, 1), fr = /* @__PURE__ */ H(pe, 5, 1), ie = function(e) {
+  for (var r = e[0], n = 1; n < e.length; ++n)
+    e[n] > r && (r = e[n]);
   return r;
-}, F = function(e, r, t) {
-  var n = r / 8 | 0;
-  return (e[n] | e[n + 1] << 8) >> (r & 7) & t;
-}, ie = function(e, r) {
+}, B = function(e, r, n) {
   var t = r / 8 | 0;
-  return (e[t] | e[t + 1] << 8 | e[t + 2] << 16) >> (r & 7);
-}, cr = function(e) {
+  return (e[t] | e[t + 1] << 8) >> (r & 7) & n;
+}, se = function(e, r) {
+  var n = r / 8 | 0;
+  return (e[n] | e[n + 1] << 8 | e[n + 2] << 16) >> (r & 7);
+}, gr = function(e) {
   return (e + 7) / 8 | 0;
-}, fe = function(e, r, t) {
-  return (r == null || r < 0) && (r = 0), (t == null || t > e.length) && (t = e.length), new M(e.subarray(r, t));
-}, lr = [
+}, me = function(e, r, n) {
+  return (r == null || r < 0) && (r = 0), (n == null || n > e.length) && (n = e.length), new b(e.subarray(r, n));
+}, mr = [
   "unexpected EOF",
   "invalid block type",
   "invalid length/literal",
@@ -142,248 +142,248 @@ var sr = /* @__PURE__ */ z(X, 9, 1), or = /* @__PURE__ */ z(Le, 5, 1), ae = func
   "stream finishing",
   "invalid zip data"
   // determined by unknown compression method
-], k = function(e, r, t) {
-  var n = new Error(r || lr[e]);
-  if (n.code = e, Error.captureStackTrace && Error.captureStackTrace(n, k), !t)
-    throw n;
-  return n;
-}, dr = function(e, r, t, n) {
-  var i = e.length, a = n ? n.length : 0;
+], v = function(e, r, n) {
+  var t = new Error(r || mr[e]);
+  if (t.code = e, Error.captureStackTrace && Error.captureStackTrace(t, v), !n)
+    throw t;
+  return t;
+}, hr = function(e, r, n, t) {
+  var i = e.length, a = t ? t.length : 0;
   if (!i || r.f && !r.l)
-    return t || new M(0);
-  var s = !t, c = s || r.i != 2, l = r.i;
-  s && (t = new M(i * 3));
-  var d = function(ve) {
-    var ke = t.length;
-    if (ve > ke) {
-      var Me = new M(Math.max(ke * 2, ve));
-      Me.set(t), t = Me;
+    return n || new b(0);
+  var s = !n, c = s || r.i != 2, o = r.i;
+  s && (n = new b(i * 3));
+  var u = function(be) {
+    var Ce = n.length;
+    if (be > Ce) {
+      var Ae = new b(Math.max(Ce * 2, be));
+      Ae.set(n), n = Ae;
     }
-  }, f = r.f || 0, o = r.p || 0, u = r.b || 0, m = r.l, g = r.d, h = r.m, w = r.n, _ = i * 8;
+  }, f = r.f || 0, l = r.p || 0, d = r.b || 0, g = r.l, m = r.d, h = r.m, I = r.n, N = i * 8;
   do {
-    if (!m) {
-      f = F(e, o, 1);
-      var x = F(e, o + 1, 3);
-      if (o += 3, x)
-        if (x == 1)
-          m = sr, g = or, h = 9, w = 5;
-        else if (x == 2) {
-          var Q = F(e, o, 31) + 257, ge = F(e, o + 10, 15) + 4, me = Q + F(e, o + 5, 31) + 1;
-          o += 14;
-          for (var W = new M(me), ee = new M(19), A = 0; A < ge; ++A)
-            ee[tr[A]] = F(e, o + A * 3, 7);
-          o += ge * 3;
-          for (var he = ae(ee), He = (1 << he) - 1, Je = z(ee, he, 1), A = 0; A < me; ) {
-            var ye = Je[F(e, o, He)];
-            o += ye & 15;
-            var v = ye >> 4;
-            if (v < 16)
-              W[A++] = v;
+    if (!g) {
+      f = B(e, l, 1);
+      var w = B(e, l + 1, 3);
+      if (l += 3, w)
+        if (w == 1)
+          g = ur, m = fr, h = 9, I = 5;
+        else if (w == 2) {
+          var L = B(e, l, 31) + 257, ye = B(e, l + 10, 15) + 4, we = L + B(e, l + 5, 31) + 1;
+          l += 14;
+          for (var X = new b(we), re = new b(19), C = 0; C < ye; ++C)
+            re[cr[C]] = B(e, l + C * 3, 7);
+          l += ye * 3;
+          for (var xe = ie(re), rr = (1 << xe) - 1, tr = H(re, xe, 1), C = 0; C < we; ) {
+            var Ie = tr[B(e, l, rr)];
+            l += Ie & 15;
+            var x = Ie >> 4;
+            if (x < 16)
+              X[C++] = x;
             else {
-              var L = 0, Y = 0;
-              for (v == 16 ? (Y = 3 + F(e, o, 3), o += 2, L = W[A - 1]) : v == 17 ? (Y = 3 + F(e, o, 7), o += 3) : v == 18 && (Y = 11 + F(e, o, 127), o += 7); Y--; )
-                W[A++] = L;
+              var U = 0, J = 0;
+              for (x == 16 ? (J = 3 + B(e, l, 3), l += 2, U = X[C - 1]) : x == 17 ? (J = 3 + B(e, l, 7), l += 3) : x == 18 && (J = 11 + B(e, l, 127), l += 7); J--; )
+                X[C++] = U;
             }
           }
-          var we = W.subarray(0, Q), E = W.subarray(Q);
-          h = ae(we), w = ae(E), m = z(we, h, 1), g = z(E, w, 1);
+          var ke = X.subarray(0, L), E = X.subarray(L);
+          h = ie(ke), I = ie(E), g = H(ke, h, 1), m = H(E, I, 1);
         } else
-          k(1);
+          v(1);
       else {
-        var v = cr(o) + 4, T = e[v - 4] | e[v - 3] << 8, Z = v + T;
-        if (Z > i) {
-          l && k(0);
+        var x = gr(l) + 4, k = e[x - 4] | e[x - 3] << 8, K = x + k;
+        if (K > i) {
+          o && v(0);
           break;
         }
-        c && d(u + T), t.set(e.subarray(v, Z), u), r.b = u += T, r.p = o = Z * 8, r.f = f;
+        c && u(d + k), n.set(e.subarray(x, K), d), r.b = d += k, r.p = l = K * 8, r.f = f;
         continue;
       }
-      if (o > _) {
-        l && k(0);
+      if (l > N) {
+        o && v(0);
         break;
       }
     }
-    c && d(u + 131072);
-    for (var Ze = (1 << h) - 1, Qe = (1 << w) - 1, re = o; ; re = o) {
-      var L = m[ie(e, o) & Ze], q = L >> 4;
-      if (o += L & 15, o > _) {
-        l && k(0);
+    c && u(d + 131072);
+    for (var nr = (1 << h) - 1, ar = (1 << I) - 1, te = l; ; te = l) {
+      var U = g[se(e, l) & nr], q = U >> 4;
+      if (l += U & 15, l > N) {
+        o && v(0);
         break;
       }
-      if (L || k(2), q < 256)
-        t[u++] = q;
+      if (U || v(2), q < 256)
+        n[d++] = q;
       else if (q == 256) {
-        re = o, m = null;
+        te = l, g = null;
         break;
       } else {
         var _e = q - 254;
         if (q > 264) {
-          var A = q - 257, j = Ee[A];
-          _e = F(e, o, (1 << j) - 1) + De[A], o += j;
+          var C = q - 257, j = Ve[C];
+          _e = B(e, l, (1 << j) - 1) + qe[C], l += j;
         }
-        var te = g[ie(e, o) & Qe], ne = te >> 4;
-        te || k(3), o += te & 15;
-        var E = ir[ne];
-        if (ne > 3) {
-          var j = Pe[ne];
-          E += ie(e, o) & (1 << j) - 1, o += j;
+        var ne = m[se(e, l) & ar], ae = ne >> 4;
+        ne || v(3), l += ne & 15;
+        var E = dr[ae];
+        if (ae > 3) {
+          var j = De[ae];
+          E += se(e, l) & (1 << j) - 1, l += j;
         }
-        if (o > _) {
-          l && k(0);
+        if (l > N) {
+          o && v(0);
           break;
         }
-        c && d(u + 131072);
-        var Ie = u + _e;
-        if (u < E) {
-          var xe = a - E, er = Math.min(E, Ie);
-          for (xe + u < 0 && k(3); u < er; ++u)
-            t[u] = n[xe + u];
+        c && u(d + 131072);
+        var Me = d + _e;
+        if (d < E) {
+          var ve = a - E, ir = Math.min(E, Me);
+          for (ve + d < 0 && v(3); d < ir; ++d)
+            n[d] = t[ve + d];
         }
-        for (; u < Ie; ++u)
-          t[u] = t[u - E];
+        for (; d < Me; ++d)
+          n[d] = n[d - E];
       }
     }
-    r.l = m, r.p = re, r.b = u, r.f = f, m && (f = 1, r.m = h, r.d = g, r.n = w);
+    r.l = g, r.p = te, r.b = d, r.f = f, g && (f = 1, r.m = h, r.d = m, r.n = I);
   } while (!f);
-  return u != t.length && s ? fe(t, 0, u) : t.subarray(0, u);
-}, ur = /* @__PURE__ */ new M(0), S = function(e, r) {
+  return d != n.length && s ? me(n, 0, d) : n.subarray(0, d);
+}, yr = /* @__PURE__ */ new b(0), S = function(e, r) {
   return e[r] | e[r + 1] << 8;
-}, B = function(e, r) {
+}, A = function(e, r) {
   return (e[r] | e[r + 1] << 8 | e[r + 2] << 16 | e[r + 3] << 24) >>> 0;
-}, se = function(e, r) {
-  return B(e, r) + B(e, r + 4) * 4294967296;
+}, ce = function(e, r) {
+  return A(e, r) + A(e, r + 4) * 4294967296;
 };
-function fr(e, r) {
-  return dr(e, { i: 2 }, r && r.out, r && r.dictionary);
+function wr(e, r) {
+  return hr(e, { i: 2 }, r && r.out, r && r.dictionary);
 }
-var ue = typeof TextDecoder < "u" && /* @__PURE__ */ new TextDecoder(), gr = 0;
+var fe = typeof TextDecoder < "u" && /* @__PURE__ */ new TextDecoder(), xr = 0;
 try {
-  ue.decode(ur, { stream: !0 }), gr = 1;
+  fe.decode(yr, { stream: !0 }), xr = 1;
 } catch {
 }
-var mr = function(e) {
-  for (var r = "", t = 0; ; ) {
-    var n = e[t++], i = (n > 127) + (n > 223) + (n > 239);
-    if (t + i > e.length)
-      return { s: r, r: fe(e, t - 1) };
-    i ? i == 3 ? (n = ((n & 15) << 18 | (e[t++] & 63) << 12 | (e[t++] & 63) << 6 | e[t++] & 63) - 65536, r += String.fromCharCode(55296 | n >> 10, 56320 | n & 1023)) : i & 1 ? r += String.fromCharCode((n & 31) << 6 | e[t++] & 63) : r += String.fromCharCode((n & 15) << 12 | (e[t++] & 63) << 6 | e[t++] & 63) : r += String.fromCharCode(n);
+var Ir = function(e) {
+  for (var r = "", n = 0; ; ) {
+    var t = e[n++], i = (t > 127) + (t > 223) + (t > 239);
+    if (n + i > e.length)
+      return { s: r, r: me(e, n - 1) };
+    i ? i == 3 ? (t = ((t & 15) << 18 | (e[n++] & 63) << 12 | (e[n++] & 63) << 6 | e[n++] & 63) - 65536, r += String.fromCharCode(55296 | t >> 10, 56320 | t & 1023)) : i & 1 ? r += String.fromCharCode((t & 31) << 6 | e[n++] & 63) : r += String.fromCharCode((t & 15) << 12 | (e[n++] & 63) << 6 | e[n++] & 63) : r += String.fromCharCode(t);
   }
 };
-function hr(e, r) {
+function kr(e, r) {
   if (r) {
-    for (var t = "", n = 0; n < e.length; n += 16384)
-      t += String.fromCharCode.apply(null, e.subarray(n, n + 16384));
-    return t;
+    for (var n = "", t = 0; t < e.length; t += 16384)
+      n += String.fromCharCode.apply(null, e.subarray(t, t + 16384));
+    return n;
   } else {
-    if (ue)
-      return ue.decode(e);
-    var i = mr(e), a = i.s, t = i.r;
-    return t.length && k(8), a;
+    if (fe)
+      return fe.decode(e);
+    var i = Ir(e), a = i.s, n = i.r;
+    return n.length && v(8), a;
   }
 }
-var yr = function(e, r) {
+var _r = function(e, r) {
   return r + 30 + S(e, r + 26) + S(e, r + 28);
-}, wr = function(e, r, t) {
-  var n = S(e, r + 28), i = S(e, r + 30), a = hr(e.subarray(r + 46, r + 46 + n), !(S(e, r + 8) & 2048)), s = r + 46 + n, c = _r(e, s, i, t, B(e, r + 20), B(e, r + 24), B(e, r + 42)), l = c[0], d = c[1], f = c[2];
-  return [S(e, r + 10), l, d, a, s + i + S(e, r + 32), f];
-}, _r = function(e, r, t, n, i, a, s) {
-  var c = i == 4294967295, l = a == 4294967295, d = s == 4294967295, f = r + t, o = c + l + d;
-  if (n && o) {
+}, Mr = function(e, r, n) {
+  var t = S(e, r + 28), i = S(e, r + 30), a = kr(e.subarray(r + 46, r + 46 + t), !(S(e, r + 8) & 2048)), s = r + 46 + t, c = vr(e, s, i, n, A(e, r + 20), A(e, r + 24), A(e, r + 42)), o = c[0], u = c[1], f = c[2];
+  return [S(e, r + 10), o, u, a, s + i + S(e, r + 32), f];
+}, vr = function(e, r, n, t, i, a, s) {
+  var c = i == 4294967295, o = a == 4294967295, u = s == 4294967295, f = r + n, l = c + o + u;
+  if (t && l) {
     for (; r + 4 < f; r += 4 + S(e, r + 2))
       if (S(e, r) == 1)
         return [
-          c ? se(e, r + 4 + 8 * l) : i,
-          l ? se(e, r + 4) : a,
-          d ? se(e, r + 4 + 8 * (l + c)) : s,
+          c ? ce(e, r + 4 + 8 * o) : i,
+          o ? ce(e, r + 4) : a,
+          u ? ce(e, r + 4 + 8 * (o + c)) : s,
           1
         ];
-    n < 2 && k(13);
+    t < 2 && v(13);
   }
   return [i, a, s, 0];
 };
-function Ir(e, r) {
-  for (var t = {}, n = e.length - 22; B(e, n) != 101010256; --n)
-    (!n || e.length - n > 65558) && k(13);
-  var i = S(e, n + 8);
+function br(e, r) {
+  for (var n = {}, t = e.length - 22; A(e, t) != 101010256; --t)
+    (!t || e.length - t > 65558) && v(13);
+  var i = S(e, t + 8);
   if (!i)
     return {};
-  var a = B(e, n + 16), s = B(e, n - 20) == 117853008;
+  var a = A(e, t + 16), s = A(e, t - 20) == 117853008;
   if (s) {
-    var c = B(e, n - 12);
-    s = B(e, c) == 101075792, s && (i = B(e, c + 32), a = B(e, c + 48));
+    var c = A(e, t - 12);
+    s = A(e, c) == 101075792, s && (i = A(e, c + 32), a = A(e, c + 48));
   }
-  for (var l = 0; l < i; ++l) {
-    var d = wr(e, a, s), f = d[0], o = d[1], u = d[2], m = d[3], g = d[4], h = d[5], w = yr(e, h);
-    a = g, f ? f == 8 ? t[m] = fr(e.subarray(w, w + o), { out: new M(u) }) : k(14, "unknown compression type " + f) : t[m] = fe(e, w, w + o);
+  for (var o = 0; o < i; ++o) {
+    var u = Mr(e, a, s), f = u[0], l = u[1], d = u[2], g = u[3], m = u[4], h = u[5], I = _r(e, h);
+    a = m, f ? f == 8 ? n[g] = wr(e.subarray(I, I + l), { out: new b(d) }) : v(14, "unknown compression type " + f) : n[g] = me(e, I, I + l);
   }
-  return t;
+  return n;
 }
-const xr = "RTA1";
-function oe(e) {
-  const r = kr(e), t = new DataView(
+const Cr = "RTA1";
+function le(e) {
+  const r = Br(e), n = new DataView(
     r.buffer,
     r.byteOffset,
     r.byteLength
-  ), n = new TextDecoder().decode(r.subarray(0, 4));
-  if (n !== xr)
-    throw new Error(`Unsupported typed array binary magic: ${n}`);
-  const i = t.getUint32(4, !0), a = 8, s = a + i, c = JSON.parse(
+  ), t = new TextDecoder().decode(r.subarray(0, 4));
+  if (t !== Cr)
+    throw new Error(`Unsupported typed array binary magic: ${t}`);
+  const i = n.getUint32(4, !0), a = 8, s = a + i, c = JSON.parse(
     new TextDecoder().decode(r.subarray(a, s))
-  ), l = {}, d = s;
+  ), o = {}, u = s;
   for (const f of c.fields) {
-    const o = r.slice(
-      d + f.byteOffset,
-      d + f.byteOffset + f.byteLength
+    const l = r.slice(
+      u + f.byteOffset,
+      u + f.byteOffset + f.byteLength
     );
-    l[f.name] = vr(f.type, o.buffer, f.length);
+    o[f.name] = Ar(f.type, l.buffer, f.length);
   }
-  return l;
+  return o;
 }
-function vr(e, r, t) {
+function Ar(e, r, n) {
   switch (e) {
     case "Int32Array":
-      return new Int32Array(r.slice(0), 0, t);
+      return new Int32Array(r.slice(0), 0, n);
     case "Float32Array":
-      return new Float32Array(r.slice(0), 0, t);
+      return new Float32Array(r.slice(0), 0, n);
     case "Uint8Array":
-      return new Uint8Array(r.slice(0), 0, t);
+      return new Uint8Array(r.slice(0), 0, n);
   }
 }
-function kr(e) {
+function Br(e) {
   return e instanceof Uint8Array ? e : new Uint8Array(e);
 }
-class C extends Error {
+class F extends Error {
   code = "ASSET_VALIDATION_FAILED";
   constructor(r) {
     super(r), this.name = "AssetValidationError";
   }
 }
-function Mr(e, r = {}) {
-  const { manifest: t, gridMeta: n, gridMask: i, gridNeighbors: a, stationMeta: s, stationToGrid: c } = e;
-  if (!t.asset_version)
-    throw new C("asset_version is required");
-  if (r.expectedAssetVersion && t.asset_version !== r.expectedAssetVersion)
-    throw new C(
-      `asset_version mismatch: expected ${r.expectedAssetVersion}, got ${t.asset_version}`
+function Rr(e, r = {}) {
+  const { manifest: n, gridMeta: t, gridMask: i, gridNeighbors: a, stationMeta: s, stationToGrid: c } = e;
+  if (!n.asset_version)
+    throw new F("asset_version is required");
+  if (r.expectedAssetVersion && n.asset_version !== r.expectedAssetVersion)
+    throw new F(
+      `asset_version mismatch: expected ${r.expectedAssetVersion}, got ${n.asset_version}`
     );
-  if (t.grid_rows * t.grid_cols < t.grid_count)
-    throw new C("grid_rows * grid_cols must cover grid_count");
-  if (i.length !== t.grid_count)
-    throw new C("grid_mask length mismatch");
-  if (a.length !== t.grid_count * 8)
-    throw new C("grid_neighbors length mismatch");
+  if (n.grid_rows * n.grid_cols < n.grid_count)
+    throw new F("grid_rows * grid_cols must cover grid_count");
+  if (i.length !== n.grid_count)
+    throw new F("grid_mask length mismatch");
+  if (a.length !== n.grid_count * 8)
+    throw new F("grid_neighbors length mismatch");
   if (s.station_count !== c.length)
-    throw new C("station_meta and station_to_grid length mismatch");
-  if (n.gridId.length !== t.grid_count || n.row.length !== t.grid_count || n.col.length !== t.grid_count || n.centerX.length !== t.grid_count || n.centerY.length !== t.grid_count)
-    throw new C("grid_meta column length mismatch");
+    throw new F("station_meta and station_to_grid length mismatch");
+  if (t.gridId.length !== n.grid_count || t.row.length !== n.grid_count || t.col.length !== n.grid_count || t.centerX.length !== n.grid_count || t.centerY.length !== n.grid_count)
+    throw new F("grid_meta column length mismatch");
 }
-function Ar(e) {
-  const r = oe(e.gridMetaBytes), t = oe(e.gridNeighborsBytes), n = oe(e.stationToGridBytes), i = JSON.parse(
+function Fr(e) {
+  const r = le(e.gridMetaBytes), n = le(e.gridNeighborsBytes), t = le(e.stationToGridBytes), i = JSON.parse(
     new TextDecoder().decode(e.stationMetaBytes)
   ), a = JSON.parse(
     new TextDecoder().decode(e.renderBoundaryBytes)
   ), s = new Set(
-    i.stations.map((l) => String(l.station_id))
+    i.stations.map((o) => String(o.station_id))
   ), c = {
     manifest: e.manifest,
     gridMeta: {
@@ -394,211 +394,211 @@ function Ar(e) {
       centerY: r.center_y
     },
     gridMask: new Uint8Array(e.gridMaskBytes.buffer.slice(0)),
-    gridNeighbors: t.neighbors,
-    stationToGrid: n.grid_id,
+    gridNeighbors: n.neighbors,
+    stationToGrid: t.grid_id,
     stationMeta: i,
     renderBoundary: a,
     fixedAnchorStationIds: new Set(
-      e.fixedAnchorDictionary.stations.map((l) => l.station_id).filter((l) => s.has(l))
+      e.fixedAnchorDictionary.stations.map((o) => o.station_id).filter((o) => s.has(o))
     ),
-    fallbackNeighborStationIdsByStationId: Br(
+    fallbackNeighborStationIdsByStationId: Sr(
       e.stationNeighborRelations,
       s
     )
   };
-  return Mr(c, {
+  return Rr(c, {
     expectedAssetVersion: e.expectedAssetVersion
   }), c;
 }
-function Br(e, r) {
-  const t = /* @__PURE__ */ new Map();
-  for (const n of e.relations) {
-    if (!r.has(n.station_id))
+function Sr(e, r) {
+  const n = /* @__PURE__ */ new Map();
+  for (const t of e.relations) {
+    if (!r.has(t.station_id))
       continue;
-    const i = n.fallback_nearest_neighbors.map((a) => a.station_id).filter((a) => r.has(a));
-    t.set(n.station_id, i);
+    const i = t.fallback_nearest_neighbors.map((a) => a.station_id).filter((a) => r.has(a));
+    n.set(t.station_id, i);
   }
-  return t;
+  return n;
 }
-async function U(e, r, t) {
-  const n = new Uint8Array(r.byteLength);
-  n.set(r);
+async function p(e, r, n) {
+  const t = new Uint8Array(r.byteLength);
+  t.set(r);
   const i = await crypto.subtle.digest(
     "SHA-256",
-    n.buffer
+    t.buffer
   ), a = `sha256:${Array.from(new Uint8Array(i)).map((s) => s.toString(16).padStart(2, "0")).join("")}`;
-  if (a !== t)
-    throw new C(
-      `${e} checksum mismatch: expected ${t}, got ${a}`
+  if (a !== n)
+    throw new F(
+      `${e} checksum mismatch: expected ${n}, got ${a}`
     );
 }
-const G = {
+const V = {
   Rain5m: "rain_5m",
   Accum1hStep: "accum_1h_step"
-}, qe = {
+}, $e = {
   Legend5mV1: "legend_5m_v1",
   LegendAccum24hV1: "legend_accum_24h_v1"
 };
-function br(e, r) {
-  const t = Object.keys(e.data).map(Ae).sort(), n = /* @__PURE__ */ new Map();
-  for (const [l, d] of Object.entries(e.data))
-    n.set(Ae(l), d);
+function Nr(e, r) {
+  const n = Object.keys(e.data).map(Be).sort(), t = /* @__PURE__ */ new Map();
+  for (const [o, u] of Object.entries(e.data))
+    t.set(Be(o), u);
   const i = {}, a = Array.from(
     new Set(
-      Object.values(e.data).flat().map((l) => l.stcd)
+      Object.values(e.data).flat().map((o) => o.stcd)
     )
   ).sort();
-  for (const l of Object.values(e.data))
-    for (const d of l)
-      i[d.stcd] || (i[d.stcd] = d);
-  const s = new Float32Array(t.length * a.length);
+  for (const o of Object.values(e.data))
+    for (const u of o)
+      i[u.stcd] || (i[u.stcd] = u);
+  const s = new Float32Array(n.length * a.length);
   s.fill(Number.NaN);
   const c = new Map(
-    a.map((l, d) => [l, d])
+    a.map((o, u) => [o, u])
   );
-  return t.forEach((l, d) => {
-    const f = n.get(l) ?? [];
-    for (const o of f) {
-      const u = c.get(o.stcd);
-      u !== void 0 && (s[d * a.length + u] = o.drp);
+  return n.forEach((o, u) => {
+    const f = t.get(o) ?? [];
+    for (const l of f) {
+      const d = c.get(l.stcd);
+      d !== void 0 && (s[u * a.length + d] = l.drp);
     }
   }), {
-    frameTimes: t,
+    frameTimes: n,
     productType: r.productType,
     stationIds: a,
     stationMetaById: i,
     values: s
   };
 }
-function Ae(e) {
-  const [r, t] = e.split(" ");
-  return `${r}T${t}+08:00`;
+function Be(e) {
+  const [r, n] = e.split(" ");
+  return `${r}T${n}+08:00`;
 }
-class N extends Error {
+class T extends Error {
   code = "PACKAGE_VALIDATION_FAILED";
   constructor(r) {
     super(r), this.name = "PackageValidationError";
   }
 }
-function Fr(e, r) {
+function Gr(e, r) {
   if (e.code !== "0")
-    throw new N(
+    throw new T(
       `${r.expectedProductType} response code must be 0`
     );
-  const t = Object.keys(e.data ?? {});
-  if (t.length === 0)
-    throw new N(
+  const n = Object.keys(e.data ?? {});
+  if (n.length === 0)
+    throw new T(
       `${r.expectedProductType} response must contain at least one frame`
     );
-  const n = new Set(
-    (e.data[t[0]] ?? []).map((i) => i.stcd)
+  const t = new Set(
+    (e.data[n[0]] ?? []).map((i) => i.stcd)
   );
-  if (n.size === 0)
-    throw new N(
+  if (t.size === 0)
+    throw new T(
       `${r.expectedProductType} response must contain at least one station`
     );
-  for (const i of t.slice(1)) {
+  for (const i of n.slice(1)) {
     const a = new Set(
       (e.data[i] ?? []).map((s) => s.stcd)
     );
-    if (a.size !== n.size)
-      throw new N(
+    if (a.size !== t.size)
+      throw new T(
         `${r.expectedProductType} station count mismatch across frames`
       );
-    for (const s of n)
+    for (const s of t)
       if (!a.has(s))
-        throw new N(
+        throw new T(
           `${r.expectedProductType} station set mismatch across frames`
         );
   }
 }
-function Rr(e) {
+function Tr(e) {
   if (e.rain5m.stationIds.join("|") !== e.accum1h.stationIds.join("|"))
-    throw new N("5 分钟和 1 小时接口的站点集合不一致");
-  Be(e.rain5m.frameTimes, 5, "5 分钟"), Be(e.accum1h.frameTimes, 60, "1 小时");
+    throw new T("5 分钟和 1 小时接口的站点集合不一致");
+  Re(e.rain5m.frameTimes, 5, "5 分钟"), Re(e.accum1h.frameTimes, 60, "1 小时");
 }
-function Be(e, r, t) {
-  for (let n = 1; n < e.length; n += 1) {
-    const i = Date.parse(e[n - 1]);
-    if (Date.parse(e[n]) - i !== r * 60 * 1e3)
-      throw new N(`${t}序列时间步长不正确`);
+function Re(e, r, n) {
+  for (let t = 1; t < e.length; t += 1) {
+    const i = Date.parse(e[t - 1]);
+    if (Date.parse(e[t]) - i !== r * 60 * 1e3)
+      throw new T(`${n}序列时间步长不正确`);
   }
 }
-async function Cr(e) {
-  const r = await ("directoryHandle" in e ? await pr(e.directoryHandle) : Nr(e.files));
-  return Ue(r);
+async function Pr(e) {
+  const r = await ("directoryHandle" in e ? await Vr(e.directoryHandle) : Dr(e.files));
+  return We(r);
 }
-async function Sr(e) {
-  const r = Ir(new Uint8Array(await e.arrayBuffer())), t = /* @__PURE__ */ new Map();
-  for (const [n, i] of Object.entries(r))
-    n.endsWith("/") || t.set(D(n), i);
-  return Ue(t);
+async function Er(e) {
+  const r = br(new Uint8Array(await e.arrayBuffer())), n = /* @__PURE__ */ new Map();
+  for (const [t, i] of Object.entries(r))
+    t.endsWith("/") || n.set(D(t), i);
+  return We(n);
 }
-async function Tr(e) {
-  const r = e.realtime5mFile ? Fe(await be(e.realtime5mFile), G.Rain5m) : null, t = e.realtime1hFile ? Fe(await be(e.realtime1hFile), G.Accum1hStep) : null;
-  if (!r && !t)
-    throw new N("请至少导入一个 JSON 文件");
-  const n = r?.stationIds ?? t?.stationIds ?? [], i = r ?? Re(G.Rain5m, n), a = t ?? Re(G.Accum1hStep, n), s = {
-    stationIds: n,
+async function Or(e) {
+  const r = e.realtime5mFile ? Se(await Fe(e.realtime5mFile), V.Rain5m) : null, n = e.realtime1hFile ? Se(await Fe(e.realtime1hFile), V.Accum1hStep) : null;
+  if (!r && !n)
+    throw new T("请至少导入一个 JSON 文件");
+  const t = r?.stationIds ?? n?.stationIds ?? [], i = r ?? Ne(V.Rain5m, t), a = n ?? Ne(V.Accum1hStep, t), s = {
+    stationIds: t,
     rain5m: i,
     accum1h: a
   };
-  return Rr(s), s;
+  return Tr(s), s;
 }
-async function Ue(e) {
-  const r = ce(e, "asset_manifest.json"), t = p(e, r), n = JSON.parse(new TextDecoder().decode(t)), i = Pr(r), a = V(i, n.files.grid_meta), s = V(i, n.files.grid_mask), c = V(i, n.files.grid_neighbors), l = V(i, n.files.station_to_grid), d = V(i, n.files.station_meta), f = V(i, n.files.render_boundary), o = p(e, a), u = p(e, s), m = p(e, c), g = p(e, l), h = p(e, d), w = p(e, f);
-  await U(n.files.grid_meta, o, n.checksums.grid_meta), await U(n.files.grid_mask, u, n.checksums.grid_mask), await U(
-    n.files.grid_neighbors,
-    m,
-    n.checksums.grid_neighbors
-  ), await U(
-    n.files.station_to_grid,
+async function We(e) {
+  const r = oe(e, "asset_manifest.json"), n = G(e, r), t = JSON.parse(new TextDecoder().decode(n)), i = Ur(r), a = $(i, t.files.grid_meta), s = $(i, t.files.grid_mask), c = $(i, t.files.grid_neighbors), o = $(i, t.files.station_to_grid), u = $(i, t.files.station_meta), f = $(i, t.files.render_boundary), l = G(e, a), d = G(e, s), g = G(e, c), m = G(e, o), h = G(e, u), I = G(e, f);
+  await p(t.files.grid_meta, l, t.checksums.grid_meta), await p(t.files.grid_mask, d, t.checksums.grid_mask), await p(
+    t.files.grid_neighbors,
     g,
-    n.checksums.station_to_grid
-  ), await U(
-    n.files.station_meta,
+    t.checksums.grid_neighbors
+  ), await p(
+    t.files.station_to_grid,
+    m,
+    t.checksums.station_to_grid
+  ), await p(
+    t.files.station_meta,
     h,
-    n.checksums.station_meta
-  ), await U(
-    n.files.render_boundary,
-    w,
-    n.checksums.render_boundary
+    t.checksums.station_meta
+  ), await p(
+    t.files.render_boundary,
+    I,
+    t.checksums.render_boundary
   );
-  const _ = ce(
+  const N = oe(
     e,
     "fixed_anchor_stations.json"
-  ), x = ce(
+  ), w = oe(
     e,
     "station_neighbor_relations_5km.json"
   );
-  return Ar({
-    manifest: n,
-    gridMetaBytes: o,
-    gridMaskBytes: u,
-    gridNeighborsBytes: m,
-    stationToGridBytes: g,
+  return Fr({
+    manifest: t,
+    gridMetaBytes: l,
+    gridMaskBytes: d,
+    gridNeighborsBytes: g,
+    stationToGridBytes: m,
     stationMetaBytes: h,
-    renderBoundaryBytes: w,
+    renderBoundaryBytes: I,
     fixedAnchorDictionary: JSON.parse(
-      new TextDecoder().decode(p(e, _))
+      new TextDecoder().decode(G(e, N))
     ),
     stationNeighborRelations: JSON.parse(
-      new TextDecoder().decode(p(e, x))
+      new TextDecoder().decode(G(e, w))
     )
   });
 }
-async function pr(e) {
+async function Vr(e) {
   const r = /* @__PURE__ */ new Map();
-  return await Ve(e, "", r), r;
+  return await Ke(e, "", r), r;
 }
-async function Ve(e, r, t) {
-  for await (const [n, i] of e.entries()) {
-    const a = r ? `${r}/${n}` : n;
+async function Ke(e, r, n) {
+  for await (const [t, i] of e.entries()) {
+    const a = r ? `${r}/${t}` : t;
     if (i.kind === "directory") {
-      await Ve(i, a, t);
+      await Ke(i, a, n);
       continue;
     }
-    t.set(
+    n.set(
       D(a),
       new Uint8Array(
         await (await i.getFile()).arrayBuffer()
@@ -606,35 +606,35 @@ async function Ve(e, r, t) {
     );
   }
 }
-function Nr(e) {
-  const r = /* @__PURE__ */ new Map(), t = [];
-  for (const n of e) {
-    const i = Er(n);
-    t.push(
-      n.arrayBuffer().then((a) => {
+function Dr(e) {
+  const r = /* @__PURE__ */ new Map(), n = [];
+  for (const t of e) {
+    const i = Lr(t);
+    n.push(
+      t.arrayBuffer().then((a) => {
         r.set(D(i), new Uint8Array(a));
       })
     );
   }
-  return Promise.all(t).then(() => r);
+  return Promise.all(n).then(() => r);
 }
-async function be(e) {
+async function Fe(e) {
   try {
     return JSON.parse(await e.text());
   } catch (r) {
-    throw new N(
+    throw new T(
       r instanceof Error ? r.message : "无法读取原始接口文件"
     );
   }
 }
-function Fe(e, r) {
-  return Fr(e, {
+function Se(e, r) {
+  return Gr(e, {
     expectedProductType: r
-  }), br(e, {
+  }), Nr(e, {
     productType: r
   });
 }
-function Re(e, r) {
+function Ne(e, r) {
   return {
     frameTimes: [],
     productType: e,
@@ -643,82 +643,97 @@ function Re(e, r) {
     values: new Float32Array(0)
   };
 }
-function p(e, r) {
-  const t = e.get(D(r));
-  if (!t)
-    throw new C(`缺少文件: ${r}`);
-  return t;
+function G(e, r) {
+  const n = e.get(D(r));
+  if (!n)
+    throw new F(`缺少文件: ${r}`);
+  return n;
 }
-function ce(e, r) {
-  const t = Array.from(e.keys()).filter(
-    (n) => n.split("/").at(-1) === r
+function oe(e, r) {
+  const n = Array.from(e.keys()).filter(
+    (t) => t.split("/").at(-1) === r
   );
-  if (t.length !== 1)
-    throw new C(`无法唯一定位文件: ${r}`);
-  return t[0];
+  if (n.length !== 1)
+    throw new F(`无法唯一定位文件: ${r}`);
+  return n[0];
 }
-function Er(e) {
+function Lr(e) {
   const r = e.webkitRelativePath || e.name;
   return D(r);
 }
 function D(e) {
   return e.replace(/\\/g, "/").replace(/^\/+/, "");
 }
-function Pr(e) {
-  const r = D(e), t = r.lastIndexOf("/");
-  return t >= 0 ? r.slice(0, t) : "";
+function Ur(e) {
+  const r = D(e), n = r.lastIndexOf("/");
+  return n >= 0 ? r.slice(0, n) : "";
 }
-function V(e, r) {
+function $(e, r) {
   return D([e, r].filter(Boolean).join("/"));
 }
-function xt(e = {}) {
-  const r = e.intervalMs ?? 500, t = {
+function Et(e = {}) {
+  const r = e.intervalMs ?? 500, n = {
+    1: 1e3,
+    2: 500,
+    3: 100
+  }, t = {
     frames: [...e.frames ?? []],
     currentIndex: 0,
     currentFrame: e.frames?.[0] ?? null,
-    isPlaying: !1
+    isPlaying: !1,
+    playbackRate: 1
   };
-  let n = null;
-  const i = /* @__PURE__ */ new Set(), a = () => {
+  let i = null;
+  const a = /* @__PURE__ */ new Set(), s = () => {
     const l = {
       frames: [...t.frames],
       currentIndex: t.currentIndex,
       currentFrame: t.currentFrame,
-      isPlaying: t.isPlaying
+      isPlaying: t.isPlaying,
+      playbackRate: t.playbackRate
     };
-    for (const d of i)
+    for (const d of a)
       d(l);
-  }, s = () => (t.currentFrame = t.frames[t.currentIndex] ?? null, a(), t.currentFrame), c = () => {
-    n !== null && (clearInterval(n), n = null);
-  };
-  return {
+  }, c = () => (t.currentFrame = t.frames[t.currentIndex] ?? null, s(), t.currentFrame), o = () => {
+    i !== null && (clearTimeout(i), i = null);
+  }, u = () => {
+    if (o(), !t.isPlaying || t.frames.length <= 1)
+      return;
+    const l = n[t.playbackRate] ?? r / t.playbackRate;
+    i = setTimeout(() => {
+      if (i = null, !t.isPlaying)
+        return;
+      f.next() && t.isPlaying && u();
+    }, l);
+  }, f = {
     getState() {
       return {
         frames: [...t.frames],
         currentIndex: t.currentIndex,
         currentFrame: t.currentFrame,
-        isPlaying: t.isPlaying
+        isPlaying: t.isPlaying,
+        playbackRate: t.playbackRate
       };
     },
     subscribe(l) {
-      return i.add(l), l(this.getState()), () => {
-        i.delete(l);
+      return a.add(l), l(this.getState()), () => {
+        a.delete(l);
       };
     },
     setFrames(l) {
-      const d = [...l], f = t.currentFrame?.frameKey;
+      const d = [...l], g = t.currentFrame?.frameKey;
       if (t.frames = d, d.length === 0) {
-        t.currentIndex = 0, t.currentFrame = null, a();
+        t.currentIndex = 0, t.currentFrame = null, t.isPlaying = !1, o(), s();
         return;
       }
-      const o = f == null ? -1 : d.findIndex((u) => u.frameKey === f);
-      t.currentIndex = o >= 0 ? o : Math.min(t.currentIndex, d.length - 1), s();
+      const m = g == null ? -1 : d.findIndex((h) => h.frameKey === g);
+      t.currentIndex = m >= 0 ? m : Math.min(t.currentIndex, d.length - 1), c(), t.isPlaying && u();
     },
     selectFrame(l) {
-      return t.frames.length === 0 ? (t.currentIndex = 0, t.currentFrame = null, a(), null) : (t.currentIndex = Math.max(0, Math.min(l, t.frames.length - 1)), s());
+      return t.frames.length === 0 ? (t.currentIndex = 0, t.currentFrame = null, s(), null) : (t.currentIndex = Math.max(0, Math.min(l, t.frames.length - 1)), c());
     },
     selectFrameByKey(l) {
-      const d = t.frames.findIndex((f) => f.frameKey === l);
+      const d = t.frames.findIndex((g) => g.frameKey === l);
       return d >= 0 ? this.selectFrame(d) : null;
     },
     next() {
@@ -729,28 +744,34 @@ function xt(e = {}) {
         (t.currentIndex - 1 + t.frames.length) % t.frames.length
       );
     },
+    setPlaybackRate(l) {
+      !Number.isFinite(l) || l <= 0 || (t.playbackRate = l, s(), t.isPlaying && u());
+    },
     play() {
-      if (t.isPlaying || t.frames.length <= 1) {
-        t.isPlaying = t.frames.length > 1, a();
+      if (t.frames.length <= 1) {
+        t.isPlaying = !1, s();
         return;
       }
-      t.isPlaying = !0, a(), n = setInterval(() => {
-        this.next();
-      }, r);
+      if (t.isPlaying) {
+        u(), s();
+        return;
+      }
+      t.isPlaying = !0, s(), u();
     },
     pause() {
-      t.isPlaying = !1, c(), a();
+      t.isPlaying = !1, o(), s();
     },
     dispose() {
-      t.isPlaying = !1, c(), t.frames = [], t.currentIndex = 0, t.currentFrame = null, a(), i.clear();
+      t.isPlaying = !1, o(), t.frames = [], t.currentIndex = 0, t.currentFrame = null, s(), a.clear();
     }
   };
+  return f;
 }
 const R = {
   Idle: "idle",
   Busy: "busy",
   Terminated: "terminated"
-}, J = {
+}, Q = {
   AssetValidationFailed: "ASSET_VALIDATION_FAILED",
   PackageValidationFailed: "PACKAGE_VALIDATION_FAILED",
   BackendUnavailable: "BACKEND_UNAVAILABLE",
@@ -761,28 +782,28 @@ const R = {
   FrameComputeFailed: "FRAME_COMPUTE_FAILED",
   UnknownError: "UNKNOWN_ERROR"
 };
-class le extends Error {
+class de extends Error {
   code;
   details;
-  constructor(r, t, n) {
-    super(t), this.name = "RainIsoError", this.code = r, this.details = n;
+  constructor(r, n, t) {
+    super(n), this.name = "RainIsoError", this.code = r, this.details = t;
   }
 }
-function Gr(e) {
-  const r = e.requestIdFactory ?? Or, t = /* @__PURE__ */ new Map();
-  let n = R.Idle;
+function qr(e) {
+  const r = e.requestIdFactory ?? pr, n = /* @__PURE__ */ new Map();
+  let t = R.Idle;
   return e.worker.onmessage = (i) => {
-    const a = i.data, s = t.get(a.request_id);
+    const a = i.data, s = n.get(a.request_id);
     if (s) {
       if (a.type === "backend_detected" && s.kind === "detect_backend") {
-        t.delete(a.request_id), n = R.Idle, s.resolve({
+        n.delete(a.request_id), t = R.Idle, s.resolve({
           selectedBackend: a.payload.selected_backend,
           availableBackends: a.payload.available_backends
         });
         return;
       }
       if (a.type === "assets_loaded" && s.kind === "load_assets") {
-        t.delete(a.request_id), n = R.Idle, s.resolve({
+        n.delete(a.request_id), t = R.Idle, s.resolve({
           assetVersion: a.payload.asset_version,
           gridCount: a.payload.grid_count,
           stationCount: a.payload.station_count,
@@ -812,12 +833,18 @@ function Gr(e) {
         s.handlers?.onFrameReady?.({
           taskId: a.payload.task_id,
           frameKey: a.payload.frame_key,
-          frameResult: a.payload.frame_result
+          frameResult: a.payload.frame_result,
+          renderedFrame: a.payload.rendered_frame ? {
+            frameKey: a.payload.rendered_frame.frame_key,
+            width: a.payload.rendered_frame.width,
+            height: a.payload.rendered_frame.height,
+            pixels: a.payload.rendered_frame.pixels
+          } : void 0
         });
         return;
       }
       if (a.type === "task_completed" && s.kind === "start_task") {
-        t.delete(a.request_id), n = R.Idle, s.resolve({
+        n.delete(a.request_id), t = R.Idle, s.resolve({
           taskId: a.payload.task_id,
           status: "completed",
           completedFrames: a.payload.completed_frames,
@@ -828,7 +855,7 @@ function Gr(e) {
         return;
       }
       if (a.type === "task_cancelled" && s.kind === "start_task") {
-        t.delete(a.request_id), n = R.Idle, s.resolve({
+        n.delete(a.request_id), t = R.Idle, s.resolve({
           taskId: a.payload.task_id,
           status: "cancelled",
           completedFrames: a.payload.completed_frames ?? s.lastCompletedFrames,
@@ -837,9 +864,9 @@ function Gr(e) {
         return;
       }
       if (a.type === "task_failed") {
-        t.delete(a.request_id), n = R.Idle, s.reject(
-          new le(
-            Dr(a.payload.error_code),
+        n.delete(a.request_id), t = R.Idle, s.reject(
+          new de(
+            $r(a.payload.error_code),
             a.payload.message,
             a.payload.details
           )
@@ -847,21 +874,21 @@ function Gr(e) {
         return;
       }
       s.reject(
-        new le(
-          J.UnknownError,
+        new de(
+          Q.UnknownError,
           `Unsupported worker response: ${a.type}`
         )
       );
     }
   }, e.worker.onerror = () => {
-    n = R.Idle;
-    for (const [i, a] of t)
+    t = R.Idle;
+    for (const [i, a] of n)
       a.reject(
-        new le(
-          J.UnknownError,
+        new de(
+          Q.UnknownError,
           "Worker runtime error"
         )
-      ), t.delete(i);
+      ), n.delete(i);
   }, {
     async detectBackend() {
       const i = {
@@ -869,8 +896,8 @@ function Gr(e) {
         request_id: r(),
         payload: {}
       };
-      return n = R.Busy, new Promise((a, s) => {
-        t.set(i.request_id, {
+      return t = R.Busy, new Promise((a, s) => {
+        n.set(i.request_id, {
           kind: "detect_backend",
           resolve: a,
           reject: s
@@ -883,8 +910,8 @@ function Gr(e) {
         request_id: r(),
         payload: i
       };
-      return n = R.Busy, new Promise((s, c) => {
-        t.set(a.request_id, {
+      return t = R.Busy, new Promise((s, c) => {
+        n.set(a.request_id, {
           kind: "load_assets",
           resolve: s,
           reject: c
@@ -909,11 +936,11 @@ function Gr(e) {
           } : void 0
         }
       };
-      return n = R.Busy, new Promise((c, l) => {
-        t.set(s.request_id, {
+      return t = R.Busy, new Promise((c, o) => {
+        n.set(s.request_id, {
           kind: "start_task",
           resolve: c,
-          reject: l,
+          reject: o,
           handlers: a,
           lastCompletedFrames: 0,
           totalFrames: 0
@@ -931,70 +958,70 @@ function Gr(e) {
       e.worker.postMessage(a);
     },
     dispose() {
-      n = R.Terminated, e.worker.terminate();
+      t = R.Terminated, e.worker.terminate();
     },
     getStatus() {
-      return n;
+      return t;
     }
   };
 }
-function Or() {
+function pr() {
   return `req_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 10)}`;
 }
-function Dr(e) {
-  return Object.values(J).includes(e) ? e : J.UnknownError;
+function $r(e) {
+  return Object.values(Q).includes(e) ? e : Q.UnknownError;
 }
-function Lr(e) {
-  const r = e.workerFactory(), t = Gr({
+function Wr(e) {
+  const r = e.workerFactory(), n = qr({
     requestIdFactory: e.requestIdFactory,
     worker: r
   });
   return {
-    client: t,
+    client: n,
     dispose() {
-      t.dispose();
+      n.dispose();
     }
   };
 }
-const qr = "/assets/worker-runtime-CZ3_3q_Y.js";
-function vt(e = {}) {
-  const r = Lr({
+const Kr = "/assets/worker-runtime-BrKoxus1.js";
+function Ot(e = {}) {
+  const r = Wr({
     requestIdFactory: e.requestIdFactory,
-    workerFactory: e.workerFactory ?? Ur(e.workerScriptUrl)
+    workerFactory: e.workerFactory ?? Xr(e.workerScriptUrl)
   });
   return {
     detectBackend() {
       return r.client.detectBackend();
     },
-    async loadAssetBundle(t) {
-      return r.client.loadAssets(Vr(t));
+    async loadAssetBundle(n) {
+      return r.client.loadAssets(jr(n));
     },
-    async loadAssetBundleFromDirectory(t) {
-      const n = await Cr(t);
-      return this.loadAssetBundle(n);
+    async loadAssetBundleFromDirectory(n) {
+      const t = await Pr(n);
+      return this.loadAssetBundle(t);
     },
-    async loadAssetBundleFromZip(t) {
-      const n = await Sr(t);
-      return this.loadAssetBundle(n);
+    async loadAssetBundleFromZip(n) {
+      const t = await Er(n);
+      return this.loadAssetBundle(t);
     },
-    loadRainPackageFromFiles(t) {
-      return Tr(t);
+    loadRainPackageFromFiles(n) {
+      return Or(n);
     },
-    startTask(t, n) {
+    startTask(n, t) {
       return r.client.startTask(
         {
-          taskId: t.taskId,
-          rain5mSequence: Ce(t.dataPackage.rain5m),
-          accum1hSequence: Ce(t.dataPackage.accum1h),
-          preferredBackend: t.preferredBackend,
-          algorithmProfileVersion: t.algorithmProfileVersion,
-          rainMaskRadiusConfig: t.rainMaskRadiusConfig
+          taskId: n.taskId,
+          rain5mSequence: Ge(n.dataPackage.rain5m),
+          accum1hSequence: Ge(n.dataPackage.accum1h),
+          preferredBackend: n.preferredBackend,
+          algorithmProfileVersion: n.algorithmProfileVersion,
+          rainMaskRadiusConfig: n.rainMaskRadiusConfig
         },
-        n
+        t
       );
     },
-    cancelTask(t) {
-      r.client.cancelTask(t);
+    cancelTask(n) {
+      r.client.cancelTask(n);
     },
     dispose() {
       r.dispose();
@@ -1004,12 +1031,12 @@ function vt(e = {}) {
     }
   };
 }
-function Ur(e) {
-  return () => new Worker(e ?? new URL(qr, import.meta.url), {
+function Xr(e) {
+  return () => new Worker(e ?? new URL(Kr, import.meta.url), {
     type: "module"
   });
 }
-function Vr(e) {
+function jr(e) {
   const r = e.fixedAnchorStationIds;
   return {
     asset_manifest: e.manifest,
@@ -1025,13 +1052,13 @@ function Vr(e) {
     station_to_grid: e.stationToGrid,
     station_meta: {
       station_count: e.stationMeta.station_count,
-      stations: e.stationMeta.stations.map((t) => {
-        const n = r.has(String(t.station_id));
+      stations: e.stationMeta.stations.map((n) => {
+        const t = r.has(String(n.station_id));
         return {
-          ...t,
-          is_fortress_anchor: n || t.is_fortress_anchor,
-          is_tongzhou_anchor: n || t.is_tongzhou_anchor,
-          is_cross_boundary_anchor: n || t.is_cross_boundary_anchor
+          ...n,
+          is_fortress_anchor: t || n.is_fortress_anchor,
+          is_tongzhou_anchor: t || n.is_tongzhou_anchor,
+          is_cross_boundary_anchor: t || n.is_cross_boundary_anchor
         };
       })
     },
@@ -1040,7 +1067,7 @@ function Vr(e) {
     )
   };
 }
-function Ce(e) {
+function Ge(e) {
   return {
     frameTimes: e.frameTimes,
     productType: e.productType,
@@ -1049,138 +1076,143 @@ function Ce(e) {
     values: e.values
   };
 }
-const $r = 0.1, Wr = 8, jr = 7, $e = {
-  legendId: qe.Legend5mV1,
-  productType: G.Rain5m,
+const ee = 0.1, zr = 8, Hr = 7, Xe = {
+  legendId: $e.Legend5mV1,
+  productType: V.Rain5m,
   bins: [
-    I(0.1, 0.4, "#97F297", "#333333"),
-    I(0.4, 1, "#3DCE3D", "#333333"),
-    I(1, 2, "#6ACEF2", "#333333"),
-    I(2, 5, "#1010F2", "#ffffff"),
-    I(5, 10, "#F210F2", "#ffffff"),
-    I(10, 15, "#A0103D", "#ffffff"),
-    I(15, 20, "#f8aa0a", "#ffffff"),
-    I(20, null, "#9933FF", "#ffffff")
+    M(0.1, 0.4, "#97F297", "#333333"),
+    M(0.4, 1, "#3DCE3D", "#333333"),
+    M(1, 2, "#6ACEF2", "#333333"),
+    M(2, 5, "#1010F2", "#ffffff"),
+    M(5, 10, "#F210F2", "#ffffff"),
+    M(10, 15, "#A0103D", "#ffffff"),
+    M(15, 20, "#f8aa0a", "#ffffff"),
+    M(20, null, "#9933FF", "#ffffff")
   ]
-}, We = {
-  legendId: qe.LegendAccum24hV1,
-  productType: G.Accum1hStep,
+}, je = {
+  legendId: $e.LegendAccum24hV1,
+  productType: V.Accum1hStep,
   bins: [
-    I(0.1, 10, "#97F297", "#333333"),
-    I(10, 25, "#3DCE3D", "#333333"),
-    I(25, 50, "#6ACEF2", "#333333"),
-    I(50, 100, "#1010F2", "#ffffff"),
-    I(100, 250, "#A0103D", "#ffffff"),
-    I(250, 400, "#f8aa0a", "#ffffff"),
-    I(400, null, "#9933FF", "#ffffff")
+    M(0.1, 10, "#97F297", "#333333"),
+    M(10, 25, "#3DCE3D", "#333333"),
+    M(25, 50, "#6ACEF2", "#333333"),
+    M(50, 100, "#1010F2", "#ffffff"),
+    M(100, 250, "#A0103D", "#ffffff"),
+    M(250, 400, "#f8aa0a", "#ffffff"),
+    M(400, null, "#9933FF", "#ffffff")
   ]
-}, Kr = {
-  [G.Rain5m]: $e,
-  [G.Accum1hStep]: We
+}, Yr = {
+  [V.Rain5m]: Xe,
+  [V.Accum1hStep]: je
 };
-Ke($e, Wr);
-Ke(We, jr);
-function zr(e) {
-  return Kr[e];
+ze(Xe, zr);
+ze(je, Hr);
+function Jr(e) {
+  return Yr[e];
 }
-function je(e, r) {
-  if (!Number.isFinite(r) || r < $r)
+function ge(e, r) {
+  if (!Number.isFinite(r) || r < ee)
     return null;
-  for (const t of e.bins) {
-    const n = t.max === null && r >= t.min, i = t.max !== null && r >= t.min && r < t.max;
-    if (n || i)
-      return t;
+  for (const n of e.bins) {
+    const t = n.max === null && r >= n.min, i = n.max !== null && r >= n.min && r < n.max;
+    if (t || i)
+      return n;
   }
   return null;
 }
-function I(e, r, t, n) {
+function M(e, r, n, t) {
   return {
     min: e,
     max: r,
-    color: t,
-    textColor: n,
+    color: n,
+    textColor: t,
     label: r === null ? `${e}+` : `${e}~${r}`
   };
 }
-function Ke(e, r) {
+function ze(e, r) {
   if (e.bins.length !== r)
     throw new Error(
       `Legend ${e.legendId} bin count mismatch: expected ${r}, got ${e.bins.length}`
     );
 }
-function Xr(e) {
-  return zr(e).bins.map((r) => ({
+function Zr(e) {
+  return Jr(e).bins.map((r) => ({
     ...r,
-    rgba: Yr(r.color)
+    rgba: Qr(r.color)
   }));
 }
-function Yr(e) {
-  const r = e.replace("#", ""), t = Number.parseInt(r.slice(0, 2), 16), n = Number.parseInt(r.slice(2, 4), 16), i = Number.parseInt(r.slice(4, 6), 16);
-  return [t, n, i, 255];
+function Qr(e) {
+  const r = e.replace("#", ""), n = Number.parseInt(r.slice(0, 2), 16), t = Number.parseInt(r.slice(2, 4), 16), i = Number.parseInt(r.slice(4, 6), 16);
+  return [n, t, i, 255];
 }
-function Hr(e) {
-  const r = Se(e.gridMeta.col) + 1, t = Se(e.gridMeta.row) + 1, n = Math.max(1, Math.floor(e.pixelScale ?? 1)), i = (r - 1) * n + 1, a = (t - 1) * n + 1, s = new Uint8ClampedArray(i * a * 4), c = Xr(e.frameResult.frameType), l = Jr(e.renderBoundary), d = /* @__PURE__ */ new Map();
-  for (let o = 0; o < e.gridMeta.gridId.length; o += 1) {
-    const u = e.gridMeta.row[o], m = e.gridMeta.col[o];
-    d.set(b(u, m), o);
-  }
-  const f = n > 1 ? ft({
+function et(e) {
+  const r = Te(e.gridMeta.col) + 1, n = Te(e.gridMeta.row) + 1, t = Math.max(1, Math.floor(e.pixelScale ?? 1)), i = (r - 1) * t + 1, a = (n - 1) * t + 1, s = new Uint8ClampedArray(i * a * 4), c = Zr(e.frameResult.frameType), o = rt(e.gridMeta, r, n), u = t > 1 ? _t({
     frameResult: {
       ...e.frameResult,
       rainMask: e.frameResult.rainMask
     },
     gridMeta: e.gridMeta,
-    gridIndexByCell: d,
+    gridIndexByCell: o,
     legend: c
   }) : {
     valueGrid: e.frameResult.valueGrid,
     rainMask: e.frameResult.rainMask
   };
-  for (let o = 0; o < a; o += 1)
-    for (let u = 0; u < i; u += 1) {
-      const m = Zr({
-        valueGrid: f.valueGrid,
-        rainMask: f.rainMask,
+  for (let f = 0; f < a; f += 1)
+    for (let l = 0; l < i; l += 1) {
+      const d = tt({
+        valueGrid: u.valueGrid,
+        rainMask: u.rainMask,
         baseValueGrid: e.frameResult.valueGrid,
         baseRainMask: e.frameResult.rainMask,
-        gridIndexByCell: d,
-        sourceRow: o / n,
-        sourceCol: u / n,
+        transitionValueGrid: u.transitionValueGrid,
+        transitionMask: u.transitionMask,
+        isolatedSpotCoreMask: u.isolatedSpotCoreMask,
+        gridIndexByCell: o,
+        sourceRow: f / t,
+        sourceCol: l / t,
         legend: c,
-        pixelScale: n
-      }), g = je(
-        {
-          legendId: e.frameResult.legendId,
-          productType: e.frameResult.frameType,
-          bins: c
-        },
-        m
-      );
-      if (!g)
+        pixelScale: t
+      }), g = P(c, d);
+      if (g < 0)
         continue;
-      const h = (o * i + u) * 4, _ = c.find((x) => x.color === g.color)?.rgba ?? [0, 0, 0, 0];
-      s[h] = _[0], s[h + 1] = _[1], s[h + 2] = _[2], s[h + 3] = _[3];
+      const m = (f * i + l) * 4, h = c[g].rgba;
+      s[m] = h[0], s[m + 1] = h[1], s[m + 2] = h[2], s[m + 3] = h[3];
     }
-  return n > 1 && Qr({
+  return t > 1 && (nt({
     pixels: s,
     width: i,
     height: a,
-    pixelScale: n,
+    pixelScale: t,
     sourceWidth: r,
-    sourceHeight: t,
-    gridIndexByCell: d,
-    rainMask: f.rainMask,
-    valueGrid: f.valueGrid,
+    sourceHeight: n,
+    gridIndexByCell: o,
+    rainMask: u.rainMask,
+    valueGrid: u.valueGrid,
+    isolatedSpotCoreMask: u.isolatedSpotCoreMask,
     legend: c,
     legendId: e.frameResult.legendId,
     frameType: e.frameResult.frameType
-  }), tt({
+  }), it({
     pixels: s,
     width: i,
     height: a,
-    pixelScale: n,
+    pixelScale: t,
+    sourceWidth: r,
+    sourceHeight: n,
+    valueGrid: e.frameResult.valueGrid,
+    rainMask: e.frameResult.rainMask,
+    gridIndexByCell: o,
+    legend: c,
+    legendId: e.frameResult.legendId,
+    frameType: e.frameResult.frameType
+  })), dt({
+    pixels: s,
+    width: i,
+    height: a,
+    pixelScale: t,
     gridMeta: e.gridMeta,
-    renderBoundary: l,
+    renderBoundary: e.renderBoundary,
     gridResolutionM: e.gridResolutionM
   }), {
     frameKey: e.frameResult.frameKey,
@@ -1188,46 +1220,53 @@ function Hr(e) {
     width: i,
     height: a,
     pixels: s,
-    getPixel(o) {
-      const u = e.gridMeta.row[o], m = e.gridMeta.col[o], g = (u * n * i + m * n) * 4;
+    getPixel(f) {
+      const l = e.gridMeta.row[f], d = e.gridMeta.col[f], g = (l * t * i + d * t) * 4;
       return s.slice(g, g + 4);
     },
-    queryGridValue(o, u) {
-      const m = d.get(b(o, u));
-      return m === void 0 || e.frameResult.rainMask[m] !== 1 ? null : e.frameResult.valueGrid[m];
+    queryGridValue(f, l) {
+      const d = _(o, f, l);
+      return d === void 0 || e.frameResult.rainMask[d] !== 1 ? null : e.frameResult.valueGrid[d];
     }
   };
 }
-function Jr(e) {
-  if (!e)
-    return;
-  const t = (Array.isArray(e.features) ? e.features : []).filter((n) => st(n));
-  return t.length === 0 ? e : {
-    ...e,
-    features: t
+function rt(e, r, n) {
+  const t = new Int32Array(r * n);
+  t.fill(-1);
+  for (let i = 0; i < e.row.length; i += 1) {
+    const a = e.row[i], s = e.col[i];
+    a < 0 || a >= n || s < 0 || s >= r || (t[a * r + s] = i);
+  }
+  return {
+    width: r,
+    height: n,
+    cells: t
   };
 }
-function b(e, r) {
-  return `${e}:${r}`;
+function _(e, r, n) {
+  if (!Number.isInteger(r) || !Number.isInteger(n) || r < 0 || r >= e.height || n < 0 || n >= e.width)
+    return;
+  const t = e.cells[r * e.width + n];
+  return t >= 0 ? t : void 0;
 }
-function Zr(e) {
-  const r = Number.isInteger(e.sourceRow) && Number.isInteger(e.sourceCol) ? e.gridIndexByCell.get(b(e.sourceRow, e.sourceCol)) : void 0;
-  return r !== void 0 ? e.pixelScale === 1 ? e.rainMask[r] === 1 ? e.valueGrid[r] : Number.NaN : e.rainMask[r] !== 1 || O(e.legend, e.valueGrid[r]) < 0 ? Number.NaN : rt(e) : ze(e);
+function tt(e) {
+  const r = Number.isInteger(e.sourceRow) && Number.isInteger(e.sourceCol) ? _(e.gridIndexByCell, e.sourceRow, e.sourceCol) : void 0;
+  return r !== void 0 ? e.pixelScale === 1 ? e.rainMask[r] === 1 ? e.valueGrid[r] : Number.NaN : e.rainMask[r] !== 1 || P(e.legend, e.valueGrid[r]) < 0 ? Number.NaN : e.isolatedSpotCoreMask?.[r] === 1 ? e.valueGrid[r] : ot(e) : He(e);
 }
-function Qr(e) {
+function nt(e) {
   for (let r = 0; r < e.sourceHeight; r += 1)
-    for (let t = 0; t < e.sourceWidth; t += 1) {
-      const n = e.gridIndexByCell.get(b(r, t));
-      if (n === void 0 || e.rainMask[n] !== 1 || !je(
+    for (let n = 0; n < e.sourceWidth; n += 1) {
+      const t = _(e.gridIndexByCell, r, n);
+      if (t === void 0 || e.rainMask[t] !== 1 || e.isolatedSpotCoreMask?.[t] === 1 || !ge(
         {
           legendId: e.legendId,
           productType: e.frameType,
           bins: e.legend
         },
-        e.valueGrid[n]
+        e.valueGrid[t]
       ))
         continue;
-      const i = r * e.pixelScale, a = t * e.pixelScale, s = et({
+      const i = r * e.pixelScale, a = n * e.pixelScale, s = at({
         width: e.width,
         height: e.height,
         pixelRow: i,
@@ -1236,152 +1275,257 @@ function Qr(e) {
       if (s === null)
         continue;
       const c = (i * e.width + a) * 4;
+      if (e.pixels[s + 3] === 0) {
+        const o = ge(
+          {
+            legendId: e.legendId,
+            productType: e.frameType,
+            bins: e.legend
+          },
+          e.valueGrid[t]
+        );
+        if (!o)
+          continue;
+        const f = e.legend.find((l) => l.color === o.color)?.rgba ?? [0, 0, 0, 0];
+        e.pixels[c] = f[0], e.pixels[c + 1] = f[1], e.pixels[c + 2] = f[2], e.pixels[c + 3] = f[3];
+        continue;
+      }
       e.pixels[c] = e.pixels[s], e.pixels[c + 1] = e.pixels[s + 1], e.pixels[c + 2] = e.pixels[s + 2], e.pixels[c + 3] = e.pixels[s + 3];
     }
 }
-function et(e) {
+function at(e) {
   const r = [
     [0, 1],
     [0, -1],
     [1, 0],
     [-1, 0]
   ];
-  for (const [t, n] of r) {
-    const i = e.pixelRow + t, a = e.pixelCol + n;
+  for (const [n, t] of r) {
+    const i = e.pixelRow + n, a = e.pixelCol + t;
     if (!(i < 0 || i >= e.height || a < 0 || a >= e.width))
       return (i * e.width + a) * 4;
   }
   return null;
 }
-function rt(e) {
-  const r = 1 / e.pixelScale, t = [
+function it(e) {
+  for (let r = 0; r < e.sourceHeight; r += 1)
+    for (let n = 0; n < e.sourceWidth; n += 1) {
+      const t = r * e.pixelScale, i = n * e.pixelScale, a = (t * e.width + i) * 4;
+      if (e.pixels[a + 3] !== 0)
+        continue;
+      const s = _(e.gridIndexByCell, r, n), c = st({
+        pixels: e.pixels,
+        width: e.width,
+        height: e.height,
+        pixelRow: t,
+        pixelCol: i,
+        ownValue: s !== void 0 && e.rainMask[s] === 1 ? e.valueGrid[s] : Number.NaN,
+        legend: e.legend
+      });
+      c && (e.pixels[a] = c[0], e.pixels[a + 1] = c[1], e.pixels[a + 2] = c[2], e.pixels[a + 3] = c[3]);
+    }
+}
+function st(e) {
+  const r = /* @__PURE__ */ new Map();
+  let n = 0;
+  for (let a = -1; a <= 1; a += 1)
+    for (let s = -1; s <= 1; s += 1) {
+      if (a === 0 && s === 0)
+        continue;
+      const c = e.pixelRow + a, o = e.pixelCol + s;
+      if (c < 0 || c >= e.height || o < 0 || o >= e.width)
+        continue;
+      const u = (c * e.width + o) * 4, f = e.pixels[u + 3];
+      if (f === 0)
+        continue;
+      const l = e.pixels[u], d = e.pixels[u + 1], g = e.pixels[u + 2];
+      if (l === 0 && d === 0 && g === 0)
+        continue;
+      n += 1;
+      const m = `${l},${d},${g},${f}`, h = r.get(m);
+      if (h) {
+        h.offsets.push([a, s]);
+        continue;
+      }
+      r.set(m, {
+        rgba: [l, d, g, f],
+        offsets: [[a, s]]
+      });
+    }
+  let t = null, i = 0;
+  for (const a of r.values())
+    lt(a.offsets) && a.offsets.length > i && (i = a.offsets.length, t = a.rgba);
+  return i < 2 ? n < 2 ? null : ct(e) : t;
+}
+function ct(e) {
+  const r = ge(
+    {
+      bins: e.legend
+    },
+    e.ownValue
+  );
+  return r ? e.legend.find((t) => t.color === r.color)?.rgba ?? null : null;
+}
+function lt(e) {
+  for (let r = 0; r < e.length; r += 1)
+    for (let n = r + 1; n < e.length; n += 1) {
+      const [t, i] = e[r], [a, s] = e[n];
+      if (Math.max(Math.abs(t - a), Math.abs(i - s)) <= 1)
+        return !0;
+    }
+  return !1;
+}
+function ot(e) {
+  const r = 1 / e.pixelScale, n = [
     [-r, -r],
     [-r, r],
     [r, -r],
     [r, r]
   ];
-  let n = 0, i = 0;
-  for (const [a, s] of t) {
-    const c = ze({
+  let t = 0, i = 0;
+  for (const [a, s] of n) {
+    const c = He({
       ...e,
       sourceRow: e.sourceRow + a,
       sourceCol: e.sourceCol + s
     });
-    Number.isFinite(c) && (n += c, i += 1);
+    Number.isFinite(c) && (t += c, i += 1);
   }
-  return i > 0 ? n / i : Number.NaN;
+  return i > 0 ? t / i : Number.NaN;
 }
-function ze(e) {
-  const r = Math.floor(e.sourceRow), t = Math.floor(e.sourceCol), n = Math.ceil(e.sourceRow), i = Math.ceil(e.sourceCol), a = e.sourceRow - r, s = e.sourceCol - t, c = [
-    { row: r, col: t, weight: (1 - a) * (1 - s) },
-    { row: r, col: i, weight: (1 - a) * s },
-    { row: n, col: t, weight: a * (1 - s) },
-    { row: n, col: i, weight: a * s }
+function He(e) {
+  const r = bt(e);
+  if (Number.isFinite(r))
+    return r;
+  if (Ct(e))
+    return Number.NaN;
+  const n = Math.floor(e.sourceRow), t = Math.floor(e.sourceCol), i = Math.ceil(e.sourceRow), a = Math.ceil(e.sourceCol), s = e.sourceRow - n, c = e.sourceCol - t, o = [
+    { row: n, col: t, weight: (1 - s) * (1 - c) },
+    { row: n, col: a, weight: (1 - s) * c },
+    { row: i, col: t, weight: s * (1 - c) },
+    { row: i, col: a, weight: s * c }
   ];
-  let l = Number.NEGATIVE_INFINITY, d = 0;
-  const f = [], o = {
+  let u = Number.NEGATIVE_INFINITY, f = 0;
+  const l = [], d = {
     weightedSum: 0,
     totalWeight: 0
   };
-  for (const g of c) {
-    if (g.weight <= 0)
+  let g = 0, m = 0;
+  const h = /* @__PURE__ */ new Set();
+  for (const w of o) {
+    if (w.weight <= 0)
       continue;
-    const h = e.gridIndexByCell.get(b(g.row, g.col));
-    if (h === void 0 || e.rainMask[h] !== 1)
+    const x = _(e.gridIndexByCell, w.row, w.col);
+    if (x === void 0)
       continue;
-    const w = e.valueGrid[h], _ = O(e.legend, w);
-    f.push(_), w > l && (l = w), d += w * g.weight, _ > -1 && (o.weightedSum += w * g.weight, o.totalWeight += g.weight);
-  }
-  if (!Number.isFinite(l))
-    return Ne({
+    const k = Je({
+      gridIndex: x,
       valueGrid: e.valueGrid,
       rainMask: e.rainMask,
+      transitionValueGrid: e.transitionValueGrid,
+      transitionMask: e.transitionMask
+    });
+    if (!Number.isFinite(k))
+      continue;
+    const K = e.rainMask[x] !== 1 && e.transitionMask?.[x] === 1, L = P(e.legend, k);
+    l.push(L), k > u && (u = k), f += k * w.weight, K ? (g += k * w.weight, m += w.weight) : h.add(x), L > -1 && (d.weightedSum += k * w.weight, d.totalWeight += w.weight);
+  }
+  if (m > 0 && h.size <= 1)
+    return g / m;
+  if (!Number.isFinite(u))
+    return Oe({
+      valueGrid: e.valueGrid,
+      rainMask: e.rainMask,
+      transitionValueGrid: e.transitionValueGrid,
+      transitionMask: e.transitionMask,
       gridIndexByCell: e.gridIndexByCell,
       sourceRow: e.sourceRow,
       sourceCol: e.sourceCol,
       legend: e.legend,
       fallbackValue: Number.NaN
     });
-  const u = Xe(f);
-  if (u >= 0) {
-    const g = gt({
-      corners: c,
-      relativePeakBin: u,
+  const I = Ze(l);
+  if (I >= 0) {
+    const w = Bt({
+      corners: o,
+      relativePeakBin: I,
       valueGrid: e.valueGrid,
       rainMask: e.rainMask,
       gridIndexByCell: e.gridIndexByCell,
       legend: e.legend
     });
-    if (Number.isFinite(g))
-      return g;
+    if (Number.isFinite(w))
+      return w;
   }
-  const m = O(e.legend, l);
-  return Ye(m, e.legend.length) ? l : Ne({
+  const N = P(e.legend, u);
+  return Qe(N, e.legend.length) ? u : Oe({
     valueGrid: e.valueGrid,
     rainMask: e.rainMask,
+    transitionValueGrid: e.transitionValueGrid,
+    transitionMask: e.transitionMask,
     gridIndexByCell: e.gridIndexByCell,
     sourceRow: e.sourceRow,
     sourceCol: e.sourceCol,
     legend: e.legend,
-    fallbackValue: d
+    fallbackValue: f
   });
 }
-function Se(e) {
+function Te(e) {
   let r = -1;
-  for (let t = 0; t < e.length; t += 1)
-    e[t] > r && (r = e[t]);
+  for (let n = 0; n < e.length; n += 1)
+    e[n] > r && (r = e[n]);
   return r;
 }
-function tt(e) {
+function dt(e) {
   if (!e.renderBoundary)
     return;
-  const r = nt(e.gridMeta, e.gridResolutionM);
+  const r = ut(e.gridMeta, e.gridResolutionM);
   if (r)
-    for (const t of at(e.renderBoundary))
-      for (let n = 1; n < t.length; n += 1) {
-        const i = pe(t[n - 1], r, e.pixelScale), a = pe(t[n], r, e.pixelScale);
-        ot(e.pixels, e.width, e.height, i, a);
+    for (const n of ft(e.renderBoundary))
+      for (let t = 1; t < n.length; t += 1) {
+        const i = Ee(n[t - 1], r, e.pixelScale), a = Ee(n[t], r, e.pixelScale);
+        mt(e.pixels, e.width, e.height, i, a);
       }
 }
-function nt(e, r) {
-  const t = Te(
+function ut(e, r) {
+  const n = Pe(
     e.centerX,
     e.col,
     e.row,
     r,
     "row"
-  ), n = Te(
+  ), t = Pe(
     e.centerY,
     e.row,
     e.col,
     r ? -r : void 0,
     "col"
   );
-  return !Number.isFinite(t) || !Number.isFinite(n) || t === 0 || n === 0 ? null : {
-    originX: e.centerX[0] - (e.col[0] + 0.5) * t,
-    originY: e.centerY[0] - (e.row[0] + 0.5) * n,
-    colStep: t,
-    rowStep: n
+  return !Number.isFinite(n) || !Number.isFinite(t) || n === 0 || t === 0 ? null : {
+    originX: e.centerX[0] - (e.col[0] + 0.5) * n,
+    originY: e.centerY[0] - (e.row[0] + 0.5) * t,
+    colStep: n,
+    rowStep: t
   };
 }
-function Te(e, r, t, n, i) {
+function Pe(e, r, n, t, i) {
   for (let a = 0; a < e.length; a += 1)
     for (let s = a + 1; s < e.length; s += 1) {
-      if (t[a] !== t[s])
+      if (n[a] !== n[s])
         continue;
       const c = r[s] - r[a];
       if (c === 0)
         continue;
-      const d = (e[s] - e[a]) / c;
-      if (Number.isFinite(d) && d !== 0)
-        return d;
+      const u = (e[s] - e[a]) / c;
+      if (Number.isFinite(u) && u !== 0)
+        return u;
     }
-  return n !== void 0 ? n : i === "row" ? 1 : -1;
+  return t !== void 0 ? t : i === "row" ? 1 : -1;
 }
-function at(e) {
-  const r = [], t = Array.isArray(e.features) ? e.features : [];
-  for (const n of t) {
-    const i = n.geometry;
+function ft(e) {
+  const r = [], n = Array.isArray(e.features) ? e.features : [];
+  for (const t of n) {
+    const i = t.geometry;
     if (i) {
       if (i.type === "Polygon" && Array.isArray(i.coordinates)) {
         for (const a of i.coordinates)
@@ -1398,149 +1542,303 @@ function at(e) {
   }
   return r;
 }
-function pe(e, r, t) {
-  const n = it(e[0], e[1]), i = (n.x - r.originX) / r.colStep - 0.5, a = (n.y - r.originY) / r.rowStep - 0.5;
+function Ee(e, r, n) {
+  const t = gt(e[0], e[1]), i = (t.x - r.originX) / r.colStep - 0.5, a = (t.y - r.originY) / r.rowStep - 0.5;
   return {
-    x: Math.round(i * t),
-    y: Math.round(a * t)
+    x: Math.round(i * n),
+    y: Math.round(a * n)
   };
 }
-function it(e, r) {
-  const n = Math.max(-85.05112878, Math.min(85.05112878, r)), i = Math.PI / 180;
+function gt(e, r) {
+  const t = Math.max(-85.05112878, Math.min(85.05112878, r)), i = Math.PI / 180;
   return {
     x: 6378137 * e * i,
-    y: 6378137 * Math.log(Math.tan(Math.PI / 4 + n * i / 2))
+    y: 6378137 * Math.log(Math.tan(Math.PI / 4 + t * i / 2))
   };
 }
-function st(e) {
-  const r = e.properties ?? {};
-  return r.xzqhdm === "110000" || r.adcode === 11e4;
-}
-function ot(e, r, t, n, i) {
-  let a = n.x, s = n.y;
-  const c = Math.abs(i.x - n.x), l = Math.abs(i.y - n.y), d = n.x < i.x ? 1 : -1, f = n.y < i.y ? 1 : -1;
-  let o = c - l;
+function mt(e, r, n, t, i) {
+  let a = t.x, s = t.y;
+  const c = Math.abs(i.x - t.x), o = Math.abs(i.y - t.y), u = t.x < i.x ? 1 : -1, f = t.y < i.y ? 1 : -1;
+  let l = c - o;
   for (; ; ) {
-    if (ct(e, r, t, a, s), a === i.x && s === i.y)
+    if (ht(e, r, n, a, s), a === i.x && s === i.y)
       return;
-    const u = o * 2;
-    u > -l && (o -= l, a += d), u < c && (o += c, s += f);
+    const d = l * 2;
+    d > -o && (l -= o, a += u), d < c && (l += c, s += f);
   }
 }
-function ct(e, r, t, n, i) {
-  if (n < 0 || i < 0 || n >= r || i >= t)
+function ht(e, r, n, t, i) {
+  if (t < 0 || i < 0 || t >= r || i >= n)
     return;
-  const a = (i * r + n) * 4;
+  const a = (i * r + t) * 4;
   e[a] = 0, e[a + 1] = 0, e[a + 2] = 0, e[a + 3] = 255;
 }
-const lt = 2, K = lt + 1, dt = 1, ut = 3, H = 2;
-function ft(e) {
-  const r = new Float32Array(e.frameResult.valueGrid), t = new Uint8Array(e.frameResult.rainMask), n = new Int16Array(r.length).fill(-1), i = new Uint8Array(r.length);
-  for (let a = 0; a < r.length; a += 1)
-    t[a] === 1 && (n[a] = O(e.legend, r[a]));
-  for (let a = 0; a < r.length; a += 1) {
-    const s = n[a];
-    if (s < 0)
+const yt = 2, z = yt + 1, wt = 1, he = 3, Z = 2, xt = 8, It = 4, kt = 64;
+function _t(e) {
+  const r = new Float32Array(e.frameResult.valueGrid), n = new Uint8Array(e.frameResult.rainMask), t = new Int16Array(r.length).fill(-1), i = new Uint8Array(r.length);
+  for (let s = 0; s < r.length; s += 1)
+    n[s] === 1 && (t[s] = P(e.legend, r[s]));
+  for (let s = 0; s < r.length; s += 1) {
+    const c = t[s];
+    if (c < 0)
       continue;
-    const c = e.gridMeta.row[a], l = e.gridMeta.col[a];
-    s === _t({
-      row: c,
-      col: l,
-      radius: K,
-      binIndexByGrid: n,
+    const o = e.gridMeta.row[s], u = e.gridMeta.col[s];
+    c === Nt({
+      row: o,
+      col: u,
+      radius: z,
+      binIndexByGrid: t,
       gridIndexByCell: e.gridIndexByCell
-    }) && (i[a] = 1);
+    }) && (i[s] = 1);
   }
-  for (let a = 0; a < r.length; a += 1) {
-    if (i[a] !== 1)
+  for (let s = 0; s < r.length; s += 1) {
+    if (i[s] !== 1)
       continue;
-    const s = e.gridMeta.row[a], c = e.gridMeta.col[a], l = n[a];
-    for (let d = -K; d <= K; d += 1)
-      for (let f = -K; f <= K; f += 1) {
-        if (d === 0 && f === 0 || Math.max(Math.abs(d), Math.abs(f)) < 2)
+    const c = e.gridMeta.row[s], o = e.gridMeta.col[s], u = t[s];
+    for (let f = -z; f <= z; f += 1)
+      for (let l = -z; l <= z; l += 1) {
+        if (f === 0 && l === 0 || Math.max(Math.abs(f), Math.abs(l)) < 2)
           continue;
-        const o = e.gridIndexByCell.get(
-          b(s + d, c + f)
-        );
-        if (o === void 0 || o <= a || i[o] !== 1 || n[o] !== l)
+        const d = _(e.gridIndexByCell, c + f, o + l);
+        if (d === void 0 || d <= s || i[d] !== 1 || t[d] !== u)
           continue;
-        const u = Math.max(r[a], r[o]), m = It({
-          startRow: s,
-          startCol: c,
-          targetRow: s + d,
-          targetCol: c + f,
+        const g = Math.max(r[s], r[d]), m = Gt({
+          startRow: c,
+          startCol: o,
+          targetRow: c + f,
+          targetCol: o + l,
           gridIndexByCell: e.gridIndexByCell
         });
-        for (const g of m)
-          u > r[g] && (r[g] = u), t[g] = 1;
+        for (const h of m)
+          g > r[h] && (r[h] = g), n[h] = 1;
       }
   }
-  for (let a = 0; a < r.length; a += 1) {
-    if (t[a] !== 1) {
-      n[a] = -1;
+  for (let s = 0; s < r.length; s += 1) {
+    if (n[s] !== 1) {
+      t[s] = -1;
       continue;
     }
-    n[a] = O(e.legend, r[a]);
+    t[s] = P(e.legend, r[s]);
   }
-  return mt({
-    rainMask: t,
+  Rt({
+    rainMask: n,
     hardAnchorMask: e.frameResult.hardAnchorMask,
-    binIndexByGrid: n,
+    binIndexByGrid: t,
     gridMeta: e.gridMeta,
     gridIndexByCell: e.gridIndexByCell
-  }), {
+  }), vt({
+    rainMask: n,
+    hardAnchorMask: e.frameResult.hardAnchorMask,
+    softObsMask: e.frameResult.softObsMask,
+    binIndexByGrid: t,
+    gridMeta: e.gridMeta,
+    gridIndexByCell: e.gridIndexByCell
+  });
+  const a = Mt({
     valueGrid: r,
-    rainMask: t
+    rainMask: n,
+    gridMeta: e.gridMeta,
+    gridIndexByCell: e.gridIndexByCell,
+    legend: e.legend
+  });
+  return {
+    valueGrid: r,
+    rainMask: n,
+    transitionValueGrid: a.valueGrid,
+    transitionMask: a.rainMask,
+    isolatedSpotCoreMask: a.isolatedSpotCoreMask
   };
 }
-function O(e, r) {
-  for (let t = 0; t < e.length; t += 1) {
-    const n = e[t], i = n.max === null && r >= n.min, a = n.max !== null && r >= n.min && r < n.max;
-    if (i || a)
-      return t;
-  }
-  return -1;
-}
-function Xe(e) {
-  const r = Array.from(new Set(e.filter((t) => t >= 0))).sort(
-    (t, n) => n - t
-  );
-  return r.length < 2 ? -1 : r[0] > r[1] ? r[0] : -1;
-}
-function Ye(e, r) {
-  return e >= Math.floor(r / 2);
-}
-function gt(e) {
-  let r = 0, t = 0;
-  for (const n of e.corners) {
-    if (n.weight <= 0)
+function Mt(e) {
+  const r = new Float32Array(e.valueGrid.length), n = new Uint8Array(e.valueGrid.length), t = new Uint8Array(e.valueGrid.length), i = new Uint8Array(e.rainMask.length);
+  for (let a = 0; a < e.rainMask.length; a += 1) {
+    if (i[a] === 1 || e.rainMask[a] !== 1)
       continue;
-    const i = e.gridIndexByCell.get(b(n.row, n.col));
-    if (i === void 0 || e.rainMask[i] !== 1)
-      continue;
-    const a = e.valueGrid[i];
-    O(e.legend, a) === e.relativePeakBin && (r += a * n.weight, t += n.weight);
+    const s = At({
+      startGridIndex: a,
+      visited: i,
+      rainMask: e.rainMask,
+      gridMeta: e.gridMeta,
+      gridIndexByCell: e.gridIndexByCell
+    });
+    if (!(s.length === 0 || s.length > he)) {
+      if (s.length === 1) {
+        t[s[0]] = 1;
+        continue;
+      }
+      for (const c of s) {
+        const o = e.gridMeta.row[c], u = e.gridMeta.col[c];
+        for (let f = -1; f <= 1; f += 1)
+          for (let l = -1; l <= 1; l += 1) {
+            if (f === 0 && l === 0)
+              continue;
+            const d = _(e.gridIndexByCell, o + f, u + l);
+            if (d === void 0 || e.rainMask[d] === 1)
+              continue;
+            const g = Ye({
+              sourceValue: e.valueGrid[c],
+              legend: e.legend,
+              distance: Math.hypot(f, l)
+            });
+            Number.isFinite(g) && (n[d] !== 1 || g > r[d]) && (n[d] = 1, r[d] = g);
+          }
+      }
+    }
   }
-  return t <= 0 ? Number.NaN : r / t;
+  return {
+    valueGrid: r,
+    rainMask: n,
+    isolatedSpotCoreMask: t
+  };
 }
-function mt(e) {
+function vt(e) {
   const r = new Uint8Array(e.rainMask.length);
-  for (let t = 0; t < e.rainMask.length; t += 1) {
-    const n = e.binIndexByGrid[t];
-    if (r[t] === 1 || e.rainMask[t] !== 1 || n < 0 || n > dt)
+  for (let n = 0; n < e.rainMask.length; n += 1) {
+    const t = e.binIndexByGrid[n];
+    if (r[n] === 1 || e.rainMask[n] !== 1 || t < 0)
       continue;
-    const i = ht({
-      startGridIndex: t,
-      targetBinIndex: n,
+    const i = er({
+      startGridIndex: n,
+      targetBinIndex: t,
       visited: r,
       rainMask: e.rainMask,
       binIndexByGrid: e.binIndexByGrid,
       gridMeta: e.gridMeta,
       gridIndexByCell: e.gridIndexByCell
     });
-    if (!(i.length > ut) && !(i.some((a) => e.hardAnchorMask[a] === 1) || yt({
+    if (i.length <= he)
+      continue;
+    let a = 0;
+    for (const c of i)
+      (e.hardAnchorMask[c] === 1 || e.softObsMask[c] === 1) && (a += 1);
+    if (a === 0)
+      continue;
+    const s = a <= xt ? It : kt;
+    if (!(i.length < a * s))
+      for (const c of i)
+        e.hardAnchorMask[c] === 1 || e.softObsMask[c] === 1 || (e.rainMask[c] = 0, e.binIndexByGrid[c] = -1);
+  }
+}
+function bt(e) {
+  if (!e.isolatedSpotCoreMask)
+    return Number.NaN;
+  const r = Math.floor(e.sourceRow) - 1, n = Math.ceil(e.sourceRow) + 1, t = Math.floor(e.sourceCol) - 1, i = Math.ceil(e.sourceCol) + 1;
+  let a = Number.NaN, s = Number.POSITIVE_INFINITY;
+  for (let c = r; c <= n; c += 1)
+    for (let o = t; o <= i; o += 1) {
+      const u = _(e.gridIndexByCell, c, o);
+      if (u === void 0 || e.isolatedSpotCoreMask[u] !== 1)
+        continue;
+      const f = Math.abs(e.sourceCol - o), l = Math.abs(e.sourceRow - c), d = f + l;
+      if (d <= 0 || d > 0.75)
+        continue;
+      const g = Ye({
+        sourceValue: e.valueGrid[u],
+        legend: e.legend,
+        distance: d
+      });
+      Number.isFinite(g) && (d < s || !Number.isFinite(a)) && (s = d, a = g);
+    }
+  return a;
+}
+function Ct(e) {
+  if (!e.isolatedSpotCoreMask)
+    return !1;
+  const r = Math.floor(e.sourceRow) - 1, n = Math.ceil(e.sourceRow) + 1, t = Math.floor(e.sourceCol) - 1, i = Math.ceil(e.sourceCol) + 1;
+  for (let a = r; a <= n; a += 1)
+    for (let s = t; s <= i; s += 1) {
+      const c = _(e.gridIndexByCell, a, s);
+      if (c !== void 0 && e.isolatedSpotCoreMask[c] === 1)
+        return !0;
+    }
+  return !1;
+}
+function At(e) {
+  const r = [], n = [e.startGridIndex];
+  for (e.visited[e.startGridIndex] = 1; n.length > 0; ) {
+    const t = n.shift();
+    if (t === void 0)
+      continue;
+    r.push(t);
+    const i = e.gridMeta.row[t], a = e.gridMeta.col[t];
+    for (let s = -1; s <= 1; s += 1)
+      for (let c = -1; c <= 1; c += 1) {
+        if (s === 0 && c === 0)
+          continue;
+        const o = _(e.gridIndexByCell, i + s, a + c);
+        o === void 0 || e.visited[o] === 1 || e.rainMask[o] !== 1 || (e.visited[o] = 1, n.push(o));
+      }
+  }
+  return r;
+}
+function Ye(e) {
+  const r = P(e.legend, e.sourceValue);
+  if (r < 0)
+    return Number.NaN;
+  if (r === 0)
+    return Math.max(
+      ee,
+      (e.sourceValue + ee) / 2
+    );
+  const n = e.legend[r - 1];
+  if (!n)
+    return Number.NaN;
+  const t = n.max === null ? n.min : (n.min + n.max) / 2, i = e.distance > 1 ? 0.85 : 1;
+  return Math.min(e.sourceValue - Number.EPSILON, t * i);
+}
+function Je(e) {
+  return e.rainMask[e.gridIndex] === 1 ? e.valueGrid[e.gridIndex] : e.transitionMask?.[e.gridIndex] === 1 && e.transitionValueGrid ? e.transitionValueGrid[e.gridIndex] : Number.NaN;
+}
+function P(e, r) {
+  if (!Number.isFinite(r) || r < ee)
+    return -1;
+  for (let n = 0; n < e.length; n += 1) {
+    const t = e[n], i = t.max === null && r >= t.min, a = t.max !== null && r >= t.min && r < t.max;
+    if (i || a)
+      return n;
+  }
+  return -1;
+}
+function Ze(e) {
+  const r = Array.from(new Set(e.filter((n) => n >= 0))).sort(
+    (n, t) => t - n
+  );
+  return r.length < 2 ? -1 : r[0] > r[1] ? r[0] : -1;
+}
+function Qe(e, r) {
+  return e >= Math.floor(r / 2);
+}
+function Bt(e) {
+  let r = 0, n = 0;
+  for (const t of e.corners) {
+    if (t.weight <= 0)
+      continue;
+    const i = _(e.gridIndexByCell, t.row, t.col);
+    if (i === void 0 || e.rainMask[i] !== 1)
+      continue;
+    const a = e.valueGrid[i];
+    P(e.legend, a) === e.relativePeakBin && (r += a * t.weight, n += t.weight);
+  }
+  return n <= 0 ? Number.NaN : r / n;
+}
+function Rt(e) {
+  const r = new Uint8Array(e.rainMask.length);
+  for (let n = 0; n < e.rainMask.length; n += 1) {
+    const t = e.binIndexByGrid[n];
+    if (r[n] === 1 || e.rainMask[n] !== 1 || t < 0 || t > wt)
+      continue;
+    const i = er({
+      startGridIndex: n,
+      targetBinIndex: t,
+      visited: r,
+      rainMask: e.rainMask,
+      binIndexByGrid: e.binIndexByGrid,
+      gridMeta: e.gridMeta,
+      gridIndexByCell: e.gridIndexByCell
+    });
+    if (!(i.length > he) && !(i.some((a) => e.hardAnchorMask[a] === 1) || Ft({
       patch: i,
-      patchBinIndex: n,
+      patchBinIndex: t,
       rainMask: e.rainMask,
       binIndexByGrid: e.binIndexByGrid,
       gridMeta: e.gridMeta,
@@ -1550,85 +1848,89 @@ function mt(e) {
         e.rainMask[a] = 0, e.binIndexByGrid[a] = -1;
   }
 }
-function ht(e) {
-  const r = [], t = [e.startGridIndex];
-  for (e.visited[e.startGridIndex] = 1; t.length > 0; ) {
-    const n = t.shift();
-    if (n === void 0)
+function er(e) {
+  const r = [], n = [e.startGridIndex];
+  for (e.visited[e.startGridIndex] = 1; n.length > 0; ) {
+    const t = n.shift();
+    if (t === void 0)
       continue;
-    r.push(n);
-    const i = e.gridMeta.row[n], a = e.gridMeta.col[n];
+    r.push(t);
+    const i = e.gridMeta.row[t], a = e.gridMeta.col[t];
     for (let s = -1; s <= 1; s += 1)
       for (let c = -1; c <= 1; c += 1) {
         if (s === 0 && c === 0)
           continue;
-        const l = e.gridIndexByCell.get(
-          b(i + s, a + c)
-        );
-        l === void 0 || e.visited[l] === 1 || e.rainMask[l] !== 1 || e.binIndexByGrid[l] !== e.targetBinIndex || (e.visited[l] = 1, t.push(l));
+        const o = _(e.gridIndexByCell, i + s, a + c);
+        o === void 0 || e.visited[o] === 1 || e.rainMask[o] !== 1 || e.binIndexByGrid[o] !== e.targetBinIndex || (e.visited[o] = 1, n.push(o));
       }
   }
   return r;
 }
-function yt(e) {
+function Ft(e) {
   const r = new Set(e.patch);
-  for (const t of e.patch) {
-    const n = e.gridMeta.row[t], i = e.gridMeta.col[t];
-    for (let a = -H; a <= H; a += 1)
-      for (let s = -H; s <= H; s += 1) {
+  for (const n of e.patch) {
+    const t = e.gridMeta.row[n], i = e.gridMeta.col[n];
+    for (let a = -Z; a <= Z; a += 1)
+      for (let s = -Z; s <= Z; s += 1) {
         if (a === 0 && s === 0)
           continue;
-        const c = e.gridIndexByCell.get(
-          b(n + a, i + s)
-        );
+        const c = _(e.gridIndexByCell, t + a, i + s);
         if (!(c === void 0 || r.has(c) || e.rainMask[c] !== 1) && e.binIndexByGrid[c] >= e.patchBinIndex)
           return !0;
       }
   }
   return !1;
 }
-const wt = 1;
-function Ne(e) {
-  const r = e.radius ?? wt, t = r + 0.5, n = e.preservePeakBins ?? !0, i = Math.round(e.sourceRow), a = Math.round(e.sourceCol);
-  let s = 0, c = 0, l = 0;
-  const d = /* @__PURE__ */ new Map(), f = /* @__PURE__ */ new Map(), o = [];
-  for (let u = -r; u <= r; u += 1)
-    for (let m = -r; m <= r; m += 1) {
-      const g = i + u, h = a + m, w = e.gridIndexByCell.get(b(g, h));
-      if (w === void 0)
+const St = 1;
+function Oe(e) {
+  const r = e.radius ?? St, n = r + 0.5, t = e.preservePeakBins ?? !0, i = Math.round(e.sourceRow), a = Math.round(e.sourceCol);
+  let s = 0, c = 0, o = 0;
+  const u = /* @__PURE__ */ new Map(), f = /* @__PURE__ */ new Map(), l = [];
+  for (let d = -r; d <= r; d += 1)
+    for (let g = -r; g <= r; g += 1) {
+      const m = i + d, h = a + g, I = _(e.gridIndexByCell, m, h);
+      if (I === void 0)
         continue;
-      const _ = Math.hypot(e.sourceRow - g, e.sourceCol - h), x = t - _;
-      if (x <= 0 || (c += x, e.rainMask[w] !== 1))
+      const N = Math.hypot(e.sourceRow - m, e.sourceCol - h), w = n - N;
+      if (w <= 0)
         continue;
-      const v = e.valueGrid[w], T = O(e.legend, v);
-      o.push(T), s += v * x, l += x, d.set(T, (d.get(T) ?? 0) + v * x), f.set(T, (f.get(T) ?? 0) + x);
+      c += w;
+      const x = Je({
+        gridIndex: I,
+        valueGrid: e.valueGrid,
+        rainMask: e.rainMask,
+        transitionValueGrid: e.transitionValueGrid,
+        transitionMask: e.transitionMask
+      });
+      if (!Number.isFinite(x))
+        continue;
+      const k = P(e.legend, x);
+      l.push(k), s += x * w, o += w, u.set(k, (u.get(k) ?? 0) + x * w), f.set(k, (f.get(k) ?? 0) + w);
     }
-  if (n) {
-    const u = Xe(o);
-    if (u >= 0) {
-      const g = f.get(u) ?? 0;
-      if (g > 0)
-        return (d.get(u) ?? 0) / g;
+  if (t) {
+    const d = Ze(l);
+    if (d >= 0) {
+      const m = f.get(d) ?? 0;
+      if (m > 0)
+        return (u.get(d) ?? 0) / m;
     }
-    const m = o.reduce(
-      (g, h) => h > g ? h : g,
+    const g = l.reduce(
+      (m, h) => h > m ? h : m,
       -1
     );
-    if (Ye(m, e.legend.length)) {
-      const g = f.get(m) ?? 0;
-      if (g > 0)
-        return (d.get(m) ?? 0) / g;
+    if (Qe(g, e.legend.length)) {
+      const m = f.get(g) ?? 0;
+      if (m > 0)
+        return (u.get(g) ?? 0) / m;
     }
   }
-  return c <= 0 || l <= 0 ? e.fallbackValue : e.normalizeByRainyWeight ? s / l : s / c;
+  return c <= 0 || o <= 0 ? e.fallbackValue : e.normalizeByRainyWeight ? s / o : s / c;
 }
-function _t(e) {
+function Nt(e) {
   let r = -1;
-  for (let t = -3; t <= e.radius; t += 1)
-    for (let n = -3; n <= e.radius; n += 1) {
-      const i = e.gridIndexByCell.get(
-        b(e.row + t, e.col + n)
-      );
+  for (let n = -3; n <= e.radius; n += 1)
+    for (let t = -3; t <= e.radius; t += 1) {
+      const i = _(e.gridIndexByCell, e.row + n, e.col + t);
       if (i === void 0)
         continue;
       const a = e.binIndexByGrid[i];
@@ -1636,40 +1938,58 @@ function _t(e) {
     }
   return r;
 }
-function It(e) {
+function Gt(e) {
   const r = [];
-  let t = e.startRow, n = e.startCol;
+  let n = e.startRow, t = e.startCol;
   for (; ; ) {
-    const i = e.targetRow - t, a = e.targetCol - n;
-    if (i === 0 && a === 0 || (t += Math.sign(i), n += Math.sign(a), t === e.targetRow && n === e.targetCol))
+    const i = e.targetRow - n, a = e.targetCol - t;
+    if (i === 0 && a === 0 || (n += Math.sign(i), t += Math.sign(a), n === e.targetRow && t === e.targetCol))
       return r;
-    const s = e.gridIndexByCell.get(b(t, n));
+    const s = _(e.gridIndexByCell, n, t);
     if (s === void 0)
       return [];
     r.push(s);
   }
 }
-function kt(e) {
-  const r = Hr({
+function Tt(e) {
+  const r = et({
     frameResult: e.frame,
     gridMeta: e.assets.gridMeta,
     renderBoundary: e.assets.renderBoundary,
     gridResolutionM: e.assets.manifest.grid_resolution_m,
     pixelScale: e.pixelScale ?? 1
-  }), t = e.canvas.getContext("2d");
-  if (!t)
-    throw new Error("2d canvas context is not available");
-  return e.canvas.width = r.width, e.canvas.height = r.height, t.putImageData(new ImageData(r.pixels, r.width, r.height), 0, 0), {
+  });
+  return {
     width: r.width,
     height: r.height,
-    frameKey: r.frameKey
+    frameKey: r.frameKey,
+    imageData: new ImageData(r.pixels, r.width, r.height)
   };
 }
+function Pt(e) {
+  const r = e.canvas.getContext("2d");
+  if (!r)
+    throw new Error("2d canvas context is not available");
+  return e.canvas.width = e.renderedFrame.width, e.canvas.height = e.renderedFrame.height, r.putImageData(e.renderedFrame.imageData, 0, 0), {
+    width: e.renderedFrame.width,
+    height: e.renderedFrame.height,
+    frameKey: e.renderedFrame.frameKey
+  };
+}
+function Vt(e) {
+  const r = Tt(e);
+  return Pt({
+    renderedFrame: r,
+    canvas: e.canvas
+  });
+}
 export {
-  vt as createRainIsoBrowserSession,
-  xt as createTimelinePlayer,
-  Cr as loadAssetBundleFromDirectory,
-  Sr as loadAssetBundleFromZip,
-  Tr as loadRainPackageFromFiles,
-  kt as renderFrameToCanvas
+  Ot as createRainIsoBrowserSession,
+  Et as createTimelinePlayer,
+  Pt as drawRenderedFrameToCanvas,
+  Pr as loadAssetBundleFromDirectory,
+  Er as loadAssetBundleFromZip,
+  Or as loadRainPackageFromFiles,
+  Vt as renderFrameToCanvas,
+  Tt as renderFrameToImageData
 };

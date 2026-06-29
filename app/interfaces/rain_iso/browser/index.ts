@@ -5,7 +5,11 @@ export {
 } from "./file-loaders.js";
 export { createTimelinePlayer } from "./timeline-player.js";
 export { createRainIsoBrowserSession } from "./browser-session.js";
-export { renderFrameToCanvas } from "./render-frame-to-canvas.js";
+export {
+  drawRenderedFrameToCanvas,
+  renderFrameToCanvas,
+  renderFrameToImageData
+} from "./render-frame-to-canvas.js";
 export type {
   BrowserAssetBundleSource,
   BrowserRainDataPackage,
@@ -14,6 +18,7 @@ export type {
   CreateRainIsoBrowserSessionOptions,
   RainIsoBrowserSession,
   RenderFrameToCanvasResult,
+  RenderedFrameImageData,
   TimelinePlaybackState,
   TimelinePlayer
 } from "./types.js";

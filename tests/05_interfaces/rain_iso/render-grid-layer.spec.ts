@@ -2,10 +2,33 @@ import { describe, expect, it } from "vitest";
 
 import { FrameType, LegendId, type FrameResult } from "../../../app/domain/rain_iso/models.js";
 import { buildColorRamp } from "../../../app/interfaces/rain_iso/render/build-color-ramp.js";
-import { renderGridLayer } from "../../../app/interfaces/rain_iso/render/render-grid-layer.js";
+import {
+  createGridIndexLookup,
+  lookupGridIndex,
+  renderGridLayer
+} from "../../../app/interfaces/rain_iso/render/render-grid-layer.js";
 import { createFrameViewModel } from "../../../app/interfaces/rain_iso/render/frame-view-model.js";
 
 describe("render grid layer", () => {
+  it("为稀疏网格构建定长查找表", () => {
+    const gridMeta = {
+      gridId: new Int32Array([10, 20, 30]),
+      row: new Int32Array([0, 2, 2]),
+      col: new Int32Array([1, 0, 3]),
+      centerX: new Float32Array([1000, 0, 3000]),
+      centerY: new Float32Array([0, 2000, 2000])
+    };
+
+    const lookup = createGridIndexLookup(gridMeta, 4, 3);
+
+    expect(lookupGridIndex(lookup, 0, 1)).toBe(0);
+    expect(lookupGridIndex(lookup, 2, 0)).toBe(1);
+    expect(lookupGridIndex(lookup, 2, 3)).toBe(2);
+    expect(lookupGridIndex(lookup, 1, 1)).toBeUndefined();
+    expect(lookupGridIndex(lookup, -1, 0)).toBeUndefined();
+    expect(lookupGridIndex(lookup, 3, 0)).toBeUndefined();
+  });
+
   it("非雨区透明，雨区按固定图例着色，并支持网格值查询", () => {
     const frame = createFrameResult({
       frameType: FrameType.Rain5m,
@@ -88,7 +111,7 @@ describe("render grid layer", () => {
     expect(readPixel(rendered, 0, 2)).toEqual([160, 16, 61, 255]);
   });
 
-  it("低量级边缘允许降档插值过渡，减轻网格锯齿", () => {
+  it("孤立低量级单格默认显示为点状核心加格外递减过渡", () => {
     const frame = createFrameResult({
       frameType: FrameType.Rain5m,
       frameKey: "rain_5m|2026-06-24T14:00:00+08:00",
@@ -104,7 +127,8 @@ describe("render grid layer", () => {
       pixelScale: 4
     });
 
-    expect(Array.from(rendered.getPixel(0))).toEqual(readPixel(rendered, 0, 1));
+    expect(Array.from(rendered.getPixel(0))).toEqual([106, 206, 242, 255]);
+    expect(readPixel(rendered, 0, 1)).toEqual([61, 206, 61, 255]);
     expect(readPixel(rendered, 0, 2)).toEqual([61, 206, 61, 255]);
   });
 
@@ -165,7 +189,7 @@ describe("render grid layer", () => {
     expect(Array.from(rendered.getPixel(4))).toEqual([0, 0, 0, 0]);
   });
 
-  it("默认双倍超采样下，孤立蓝色单格在格外生成一圈降档过渡，但不点亮相邻空格中心", () => {
+  it("默认双倍超采样下，孤立蓝色单格应呈现点状核心与格外递减过渡，而不是整格方块", () => {
     const frame = createFrameResult({
       frameType: FrameType.Rain5m,
       frameKey: "rain_5m|2026-06-24T14:06:30+08:00",
@@ -193,8 +217,180 @@ describe("render grid layer", () => {
       pixelScale: 2
     });
 
+    expect(readPixel(rendered, 2, 2)).toEqual([16, 16, 242, 255]);
     expect(readPixel(rendered, 2, 1)).toEqual([106, 206, 242, 255]);
+    expect(readPixel(rendered, 1, 2)).toEqual([106, 206, 242, 255]);
+    expect(readPixel(rendered, 1, 1)).toEqual([0, 0, 0, 0]);
     expect(Array.from(rendered.getPixel(3))).toEqual([0, 0, 0, 0]);
+  });
+
+  it("单硬锚点支撑的大块同值扩张区仅保留核心显示，外圈格心不再整片点亮", () => {
+    const values = new Array(49).fill(0);
+    const rainMask = new Array(49).fill(0);
+    const hardAnchorMask = new Array(49).fill(0);
+    for (let row = 1; row <= 5; row += 1) {
+      for (let col = 1; col <= 5; col += 1) {
+        const gridIndex = row * 7 + col;
+        values[gridIndex] = 0.5;
+        rainMask[gridIndex] = 1;
+      }
+    }
+    hardAnchorMask[24] = 1;
+
+    const frame = createFrameResult({
+      frameType: FrameType.Rain5m,
+      frameKey: "rain_5m|2026-06-24T14:06:35+08:00",
+      values,
+      rainMask,
+      hardAnchorMask,
+      softObsMask: new Array(49).fill(0)
+    });
+
+    const rendered = renderGridLayer({
+      frameResult: frame,
+      gridMeta: createSquareGridMeta(7, 7),
+      pixelScale: 2
+    });
+
+    expect(Array.from(rendered.getPixel(24))).toEqual([61, 206, 61, 255]);
+    expect(Array.from(rendered.getPixel(8))).toEqual([0, 0, 0, 0]);
+    expect(rendered.queryGridValue(1, 1)).toBeCloseTo(0.5, 5);
+  });
+
+  it("低档位多硬锚点扩张成的大块同色区也只保留各锚点核心显示", () => {
+    const values = new Array(49).fill(0);
+    const rainMask = new Array(49).fill(0);
+    const hardAnchorMask = new Array(49).fill(0);
+    for (let row = 1; row <= 5; row += 1) {
+      for (let col = 1; col <= 5; col += 1) {
+        const gridIndex = row * 7 + col;
+        values[gridIndex] = 0.2;
+        rainMask[gridIndex] = 1;
+      }
+    }
+    hardAnchorMask[16] = 1;
+    hardAnchorMask[32] = 1;
+
+    const rendered = renderGridLayer({
+      frameResult: createFrameResult({
+        frameType: FrameType.Rain5m,
+        frameKey: "rain_5m|2026-06-24T14:06:40+08:00",
+        values,
+        rainMask,
+        hardAnchorMask,
+        softObsMask: new Array(49).fill(0)
+      }),
+      gridMeta: createSquareGridMeta(7, 7),
+      pixelScale: 2
+    });
+
+    expect(Array.from(rendered.getPixel(16))).toEqual([151, 242, 151, 255]);
+    expect(Array.from(rendered.getPixel(32))).toEqual([151, 242, 151, 255]);
+    expect(Array.from(rendered.getPixel(24))).toEqual([0, 0, 0, 0]);
+  });
+
+  it("高档位单硬锚点扩张成的大块同色区也只保留核心显示", () => {
+    const values = new Array(49).fill(0);
+    const rainMask = new Array(49).fill(0);
+    const hardAnchorMask = new Array(49).fill(0);
+    for (let row = 1; row <= 5; row += 1) {
+      for (let col = 1; col <= 5; col += 1) {
+        const gridIndex = row * 7 + col;
+        values[gridIndex] = 10.8;
+        rainMask[gridIndex] = 1;
+      }
+    }
+    hardAnchorMask[24] = 1;
+
+    const rendered = renderGridLayer({
+      frameResult: createFrameResult({
+        frameType: FrameType.Rain5m,
+        frameKey: "rain_5m|2026-06-24T14:06:42+08:00",
+        values,
+        rainMask,
+        hardAnchorMask,
+        softObsMask: new Array(49).fill(0)
+      }),
+      gridMeta: createSquareGridMeta(7, 7),
+      pixelScale: 2
+    });
+
+    expect(Array.from(rendered.getPixel(24))).toEqual([160, 16, 61, 255]);
+    expect(Array.from(rendered.getPixel(8))).toEqual([0, 0, 0, 0]);
+  });
+
+  it("低档位仅 softObs 支撑的大块同色区也只保留观测核心显示", () => {
+    const values = new Array(49).fill(0);
+    const rainMask = new Array(49).fill(0);
+    const softObsMask = new Array(49).fill(0);
+    for (let row = 1; row <= 5; row += 1) {
+      for (let col = 1; col <= 5; col += 1) {
+        const gridIndex = row * 7 + col;
+        values[gridIndex] = 0.2;
+        rainMask[gridIndex] = 1;
+      }
+    }
+    softObsMask[16] = 1;
+    softObsMask[32] = 1;
+
+    const rendered = renderGridLayer({
+      frameResult: createFrameResult({
+        frameType: FrameType.Rain5m,
+        frameKey: "rain_5m|2026-06-24T14:06:43+08:00",
+        values,
+        rainMask,
+        hardAnchorMask: new Array(49).fill(0),
+        softObsMask
+      }),
+      gridMeta: createSquareGridMeta(7, 7),
+      pixelScale: 2
+    });
+
+    expect(Array.from(rendered.getPixel(16))).toEqual([151, 242, 151, 255]);
+    expect(Array.from(rendered.getPixel(32))).toEqual([151, 242, 151, 255]);
+    expect(Array.from(rendered.getPixel(24))).toEqual([0, 0, 0, 0]);
+  });
+
+  it("支撑点超过 8 个但仍极度稀疏的低档大块同色区也应收缩为观测核心", () => {
+    const values = new Array(1089).fill(0);
+    const rainMask = new Array(1089).fill(0);
+    const softObsMask = new Array(1089).fill(0);
+    for (let row = 1; row <= 33; row += 1) {
+      for (let col = 1; col <= 33; col += 1) {
+        const gridIndex = row * 33 + col;
+        values[gridIndex] = 0.2;
+        rainMask[gridIndex] = 1;
+      }
+    }
+    for (const [row, col] of [
+      [8, 8],
+      [8, 16],
+      [8, 24],
+      [16, 8],
+      [16, 16],
+      [16, 24],
+      [24, 8],
+      [24, 16],
+      [24, 24]
+    ] as const) {
+      softObsMask[row * 33 + col] = 1;
+    }
+
+    const rendered = renderGridLayer({
+      frameResult: createFrameResult({
+        frameType: FrameType.Rain5m,
+        frameKey: "rain_5m|2026-06-24T14:06:44+08:00",
+        values,
+        rainMask,
+        hardAnchorMask: new Array(1089).fill(0),
+        softObsMask
+      }),
+      gridMeta: createSquareGridMeta(33, 33),
+      pixelScale: 2
+    });
+
+    expect(Array.from(rendered.getPixel(16 * 33 + 16))).toEqual([151, 242, 151, 255]);
+    expect(Array.from(rendered.getPixel(16 * 33 + 15))).toEqual([0, 0, 0, 0]);
   });
 
   it("两格连通的小蓝斑块只在外侧补递减过渡，不改内部连片颜色", () => {
@@ -331,7 +527,7 @@ describe("render grid layer", () => {
     expect(Array.from(rendered.getPixel(7))).toEqual(readPixel(rendered, 4, 9));
   });
 
-  it("超采样合并时保留硬锚点峰值，不被周边低值压低", () => {
+  it("超采样合并时保留硬锚点格心峰值，邻近像素沿当前采样口径渐变", () => {
     const frame = createFrameResult({
       frameType: FrameType.Accum1hStep,
       frameKey: "accum_1h_step|2026-06-24T14:00:00+08:00",
@@ -346,6 +542,7 @@ describe("render grid layer", () => {
       pixelScale: 4
     });
 
+    expect(Array.from(rendered.getPixel(0))).toEqual([160, 16, 61, 255]);
     expect(readPixel(rendered, 0, 1)).toEqual([160, 16, 61, 255]);
   });
 
@@ -460,7 +657,7 @@ describe("render grid layer", () => {
     expect(readPixel(rendered, 1, 0)).toEqual([0, 0, 0, 255]);
   });
 
-  it("存在北京市界时，不再按边界裁剪网格", () => {
+  it("北京和境外边界都参与叠加，不再只画北京市界", () => {
     const frame = createFrameResult({
       frameType: FrameType.Rain5m,
       frameKey: "rain_5m|2026-06-24T13:56:00+08:00",
@@ -478,7 +675,8 @@ describe("render grid layer", () => {
     });
 
     expect(Array.from(rendered.getPixel(0))).toEqual([106, 206, 242, 255]);
-    expect(Array.from(rendered.getPixel(2))).toEqual([106, 206, 242, 255]);
+    expect(Array.from(rendered.getPixel(1))).toEqual([0, 0, 0, 255]);
+    expect(Array.from(rendered.getPixel(2))).toEqual([0, 0, 0, 255]);
   });
 });
 

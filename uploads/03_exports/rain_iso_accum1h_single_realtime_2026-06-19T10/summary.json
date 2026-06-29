@@ -1,0 +1,12 @@
+{
+  "sourcePath": "/Users/snoke/Documents/2.慧图科技/1.项目管理/北京水务局/cc客供资料/huitu_tool/rain_iso/datas/01_raw/realtime_1h_response.json",
+  "assetDirectory": "/Users/snoke/Documents/2.慧图科技/1.项目管理/北京水务局/cc客供资料/huitu_tool/rain_iso/datas/03_dictionary/rain_iso/bj_1000m_union_assets",
+  "frameKey": "accum_1h_step|2026-06-19T10:00:00+08:00",
+  "frameTime": "2026-06-19T10:00:00+08:00",
+  "maxValue": 39.599998474121094,
+  "renderableGridCount": 26674,
+  "hardAnchorCount": 27,
+  "softObsCount": 79,
+  "ordinaryOnlyMode": false,
+  "bmpPath": "/Users/snoke/Documents/2.慧图科技/1.项目管理/北京水务局/cc客供资料/huitu_tool/rain_iso/uploads/02_charts/rain_iso_accum1h_single_realtime_2026-06-19T10/accum_1h_step_2026-06-19T10-00-00-08-00.bmp"
+}

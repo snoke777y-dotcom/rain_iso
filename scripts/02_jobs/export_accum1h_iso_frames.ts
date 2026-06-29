@@ -46,7 +46,7 @@ async function main() {
   const summary = [];
 
   for (const frame of frames) {
-    const frameResult = runFrameOnCpu(frame, {
+    const frameResult = await runFrameOnCpu(frame, {
       assets,
       selectedBackend: "cpu"
     });

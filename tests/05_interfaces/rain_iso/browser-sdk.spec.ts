@@ -142,6 +142,36 @@ describe("browser sdk session", () => {
     session.dispose();
   });
 
+  it("worker 回帧时不在任务主链路附带预渲染结果", async () => {
+    const assetsFixture = createSampleBrowserAssetFiles();
+    const dataFixture = createRawRainPackageFiles();
+    const session = createRainIsoBrowserSession({
+      workerFactory: () => new LoopbackWorker()
+    });
+
+    await session.loadAssetBundleFromDirectory({
+      files: assetsFixture.files
+    });
+    const dataPackage = await session.loadRainPackageFromFiles(dataFixture);
+    const renderedWidths: number[] = [];
+
+    await session.startTask(
+      {
+        taskId: "browser-sdk-rendered-frame",
+        dataPackage
+      },
+      {
+        onFrameReady(event) {
+          renderedWidths.push(event.renderedFrame?.width ?? -1);
+        }
+      }
+    );
+
+    expect(renderedWidths.every((width) => width === -1)).toBe(true);
+
+    session.dispose();
+  });
+
   it("发往 worker 的负载会剔除浏览器侧不需要再搬运的大字段", async () => {
     const assetsFixture = createSampleBrowserAssetFiles();
     const dataFixture = createRawRainPackageFiles();

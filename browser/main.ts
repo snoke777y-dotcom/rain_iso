@@ -1,8 +1,11 @@
 import "./styles.css";
 import { ensureAssetBundle } from "./ensure-asset-bundle.js";
+import { fitCanvasToStage } from "./fit-canvas-to-stage.js";
+import { createBrowserFrameRenderer } from "./frame-renderer.js";
 import { formatFrameElapsed } from "./format-frame-elapsed.js";
 import { loadRainPackageOffThread } from "./load-rain-package-off-thread.js";
 import { createPerfReporter } from "./perf-monitor.js";
+import { scheduleIdleWork } from "./schedule-idle-work.js";
 import { shouldRenderFrame } from "./should-render-frame.js";
 
 import { BackendKind, FrameType, type FrameResult } from "../app/domain/rain_iso/models.js";
@@ -10,10 +13,12 @@ import type { RainIsoAssetBundle } from "../app/infrastructure/rain_iso/assets/a
 import {
   createRainIsoBrowserSession,
   createTimelinePlayer,
+  drawRenderedFrameToCanvas,
   loadAssetBundleFromDirectory,
   loadAssetBundleFromZip,
-  renderFrameToCanvas,
-  type BrowserRainDataPackage
+  renderFrameToImageData,
+  type BrowserRainDataPackage,
+  type RenderedFrameImageData
 } from "../app/interfaces/rain_iso/browser/index.js";
 
 const sampleFiles = [
@@ -173,7 +178,7 @@ app.innerHTML = `
           <span id="current-frame-elapsed">当前帧生成: -</span>
         </div>
       </div>
-      <div class="canvas-stage">
+      <div class="canvas-stage" id="canvas-stage">
         <canvas id="result-canvas"></canvas>
         <div class="canvas-placeholder" id="canvas-placeholder">
           <strong>等待输入动态数据</strong>
@@ -194,6 +199,11 @@ app.innerHTML = `
         <button class="plain-button" id="prev-frame">上一帧</button>
         <button class="plain-button" id="play-toggle">播放</button>
         <button class="plain-button" id="next-frame">下一帧</button>
+        <select id="playback-rate-select" aria-label="播放速度">
+          <option value="1">1x</option>
+          <option value="2">2x</option>
+          <option value="3">3x</option>
+        </select>
         <input id="timeline-range" type="range" min="0" max="0" step="1" value="0" />
         <button class="plain-button" id="redraw-frame">重绘</button>
       </div>
@@ -210,7 +220,8 @@ app.innerHTML = `
 `;
 
 const session = createRainIsoBrowserSession();
-const timeline = createTimelinePlayer({ intervalMs: 650 });
+const frameRenderer = createBrowserFrameRenderer();
+const timeline = createTimelinePlayer({ intervalMs: 120 });
 const perfReporter = createPerfReporter();
 
 const state: {
@@ -220,17 +231,22 @@ const state: {
   currentTaskId: string | null;
   totalFrames: number;
   lastRenderedFrameKey: string | null;
+  renderedFrameCache: Map<string, RenderedFrameImageData>;
+  pendingRenderedFramePromises: Map<string, Promise<RenderedFrameImageData>>;
 } = {
   assetBundle: null,
   dataPackage: null,
   frames: [],
   currentTaskId: null,
   totalFrames: 0,
-  lastRenderedFrameKey: null
+  lastRenderedFrameKey: null,
+  renderedFrameCache: new Map(),
+  pendingRenderedFramePromises: new Map()
 };
 const builtInAssetBundlePromise = preloadBuiltInAssetBundle();
 
 const canvas = byId<HTMLCanvasElement>("result-canvas");
+const canvasStage = byId("canvas-stage");
 const canvasPlaceholder = byId("canvas-placeholder");
 const assetDirInput = byId<HTMLInputElement>("asset-dir-input");
 const assetZipInput = byId<HTMLInputElement>("asset-zip-input");
@@ -238,32 +254,58 @@ const rainJsonInput = byId<HTMLInputElement>("rain-json-input");
 const backendSelect = byId<HTMLSelectElement>("backend-select");
 const productFilter = byId<HTMLSelectElement>("product-filter");
 const timelineRange = byId<HTMLInputElement>("timeline-range");
+const playbackRateSelect = byId<HTMLSelectElement>("playback-rate-select");
 const loadedRange = byId<HTMLInputElement>("loaded-range");
 const selectedFrameKey = byId<HTMLInputElement>("selected-frame-key");
+let pendingRenderFrameId: number | null = null;
+let pendingForceRender = false;
+let cancelPendingCacheWarmup: (() => void) | null = null;
+let cacheWarmupResumeTimerId: number | null = null;
+let renderWorkerAssetVersion: string | null = null;
+let renderWorkerAssetLoadPromise: Promise<void> | null = null;
 
 timeline.subscribe(() => {
   refreshTimeline();
-  renderCurrentFrame();
+  scheduleRenderCurrentFrame();
 });
 
 wireEvents();
 refreshMeta();
+window.addEventListener("resize", () => fitRenderedCanvas());
 
 function wireEvents() {
+  const markUserInteraction = () => pauseCacheWarmupForInteraction();
   byId("pick-asset-dir").addEventListener("click", () => assetDirInput.click());
   byId("pick-asset-zip").addEventListener("click", () => assetZipInput.click());
   byId("pick-rain-json").addEventListener("click", () => rainJsonInput.click());
-  byId("load-sample").addEventListener("click", () => void withErrorBoundary(loadSample));
-  byId("run-task").addEventListener("click", () => void withErrorBoundary(runTask));
+  byId("load-sample").addEventListener("click", () => {
+    markUserInteraction();
+    void withErrorBoundary(loadSample);
+  });
+  byId("run-task").addEventListener("click", () => {
+    markUserInteraction();
+    void withErrorBoundary(runTask);
+  });
   byId("cancel-task").addEventListener("click", () => {
+    markUserInteraction();
     if (state.currentTaskId) {
       session.cancelTask(state.currentTaskId);
     }
   });
-  byId("prev-frame").addEventListener("click", () => timeline.previous());
-  byId("next-frame").addEventListener("click", () => timeline.next());
-  byId("redraw-frame").addEventListener("click", () => renderCurrentFrame(true));
+  byId("prev-frame").addEventListener("click", () => {
+    markUserInteraction();
+    timeline.previous();
+  });
+  byId("next-frame").addEventListener("click", () => {
+    markUserInteraction();
+    timeline.next();
+  });
+  byId("redraw-frame").addEventListener("click", () => {
+    markUserInteraction();
+    scheduleRenderCurrentFrame(true);
+  });
   byId("play-toggle").addEventListener("click", () => {
+    markUserInteraction();
     const current = timeline.getState();
     if (current.isPlaying) {
       timeline.pause();
@@ -272,9 +314,17 @@ function wireEvents() {
     }
   });
   timelineRange.addEventListener("input", () => {
+    markUserInteraction();
     timeline.selectFrame(Number(timelineRange.value));
   });
-  productFilter.addEventListener("change", () => syncTimelineFrames());
+  playbackRateSelect.addEventListener("change", () => {
+    markUserInteraction();
+    timeline.setPlaybackRate(Number(playbackRateSelect.value));
+  });
+  productFilter.addEventListener("change", () => {
+    markUserInteraction();
+    syncTimelineFrames();
+  });
 
   assetDirInput.addEventListener("change", () =>
     void withErrorBoundary(async () => {
@@ -404,6 +454,10 @@ async function runTask() {
       ? `完成，用时 ${result.elapsedMs ?? 0}ms`
       : "任务已取消";
   perfReporter.logTaskSummary(result);
+  if (result.status === "completed") {
+    primeRenderWorkerAssets();
+    scheduleCacheWarmup();
+  }
 }
 
 async function preloadBuiltInAssetBundle() {
@@ -439,6 +493,19 @@ function syncTimelineFrames() {
   timeline.setFrames(frames);
 }
 
+function scheduleRenderCurrentFrame(force = false) {
+  pendingForceRender = pendingForceRender || force;
+  if (pendingRenderFrameId !== null) {
+    return;
+  }
+  pendingRenderFrameId = requestAnimationFrame(() => {
+    pendingRenderFrameId = null;
+    const shouldForceRender = pendingForceRender;
+    pendingForceRender = false;
+    renderCurrentFrame(shouldForceRender);
+  });
+}
+
 function renderCurrentFrame(force = false) {
   if (!state.assetBundle) {
     return;
@@ -464,18 +531,31 @@ function renderCurrentFrame(force = false) {
   }
 
   canvasPlaceholder.hidden = true;
-  const renderStartedAt = performance.now();
-  renderFrameToCanvas({
-    frame: currentFrame,
-    assets: state.assetBundle,
-    canvas,
-    pixelScale: 2
-  });
-  const renderElapsedMs = performance.now() - renderStartedAt;
   selectedFrameKey.value = currentFrame.frameKey;
   byId("current-summary").textContent =
     `峰值: ${currentFrame.summary.maxValue} / 可渲染格点: ${currentFrame.summary.renderableGridCount}`;
   byId("current-frame-elapsed").textContent = formatFrameElapsed(currentFrame.summary.elapsedMs);
+  const cached = state.renderedFrameCache.get(currentFrame.frameKey);
+  if (cached) {
+    const renderStartedAt = performance.now();
+    drawRenderedFrameToCanvas({ renderedFrame: cached, canvas });
+    fitRenderedCanvas(cached.width, cached.height);
+    const renderElapsedMs = performance.now() - renderStartedAt;
+    state.lastRenderedFrameKey = currentFrame.frameKey;
+    perfReporter.logFrameRendered({
+      frame: currentFrame,
+      index: timelineState.currentIndex + 1,
+      total: timelineState.frames.length,
+      renderElapsedMs
+    });
+    return;
+  }
+
+  const rendered = getRenderedFrame(currentFrame);
+  const renderStartedAt = performance.now();
+  drawRenderedFrameToCanvas({ renderedFrame: rendered, canvas });
+  fitRenderedCanvas(rendered.width, rendered.height);
+  const renderElapsedMs = performance.now() - renderStartedAt;
   state.lastRenderedFrameKey = currentFrame.frameKey;
   perfReporter.logFrameRendered({
     frame: currentFrame,
@@ -496,11 +576,144 @@ function refreshTimeline() {
   byId("timeline-progress-label").textContent =
     `${timelineState.frames.length === 0 ? 0 : timelineState.currentIndex + 1} / ${timelineState.frames.length}`;
   byId("timeline-summary").textContent = timelineState.isPlaying
-    ? "播放中"
+    ? `播放中 ${timelineState.playbackRate}x`
     : timelineState.frames.length > 0
-      ? "已暂停，可拖动时间轴"
+      ? `已暂停，可拖动时间轴（${timelineState.playbackRate}x）`
       : "尚未收到帧";
   byId("play-toggle").textContent = timelineState.isPlaying ? "暂停" : "播放";
+  playbackRateSelect.value = String(timelineState.playbackRate);
+}
+
+function fitRenderedCanvas(
+  renderedWidth = canvas.width,
+  renderedHeight = canvas.height
+) {
+  if (renderedWidth <= 0 || renderedHeight <= 0) {
+    return;
+  }
+  const fitted = fitCanvasToStage({
+    canvasWidth: renderedWidth,
+    canvasHeight: renderedHeight,
+    stageWidth: canvasStage.clientWidth,
+    stageHeight: canvasStage.clientHeight,
+    padding: 32
+  });
+  canvas.style.width = `${fitted.width}px`;
+  canvas.style.height = `${fitted.height}px`;
+}
+
+function getRenderedFrame(frame: FrameResult) {
+  const cached = state.renderedFrameCache.get(frame.frameKey);
+  if (cached) {
+    return cached;
+  }
+  const rendered = renderFrameToImageData({
+    frame,
+    assets: state.assetBundle!,
+    pixelScale: 2
+  });
+  state.renderedFrameCache.set(frame.frameKey, rendered);
+  return rendered;
+}
+
+function primeRenderWorkerAssets() {
+  if (!state.assetBundle) {
+    return;
+  }
+  void ensureRenderWorkerAssetsLoaded();
+}
+
+function ensureRenderWorkerAssetsLoaded() {
+  if (!state.assetBundle) {
+    return Promise.resolve();
+  }
+  const assetVersion = state.assetBundle.manifest.asset_version;
+  if (renderWorkerAssetVersion === assetVersion) {
+    return Promise.resolve();
+  }
+  if (renderWorkerAssetLoadPromise) {
+    return renderWorkerAssetLoadPromise;
+  }
+  renderWorkerAssetLoadPromise = frameRenderer
+    .loadAssets(state.assetBundle)
+    .then(() => {
+      renderWorkerAssetVersion = assetVersion;
+    })
+    .finally(() => {
+      renderWorkerAssetLoadPromise = null;
+    });
+  return renderWorkerAssetLoadPromise;
+}
+
+function ensureRenderedFrame(frame: FrameResult) {
+  const cached = state.renderedFrameCache.get(frame.frameKey);
+  if (cached) {
+    return Promise.resolve(cached);
+  }
+  const pending = state.pendingRenderedFramePromises.get(frame.frameKey);
+  if (pending) {
+    return pending;
+  }
+  const renderPromise = ensureRenderWorkerAssetsLoaded()
+    .then(() =>
+      frameRenderer.renderFrame({
+        frame,
+        pixelScale: 2
+      })
+    )
+    .catch(() => getRenderedFrame(frame))
+    .then((rendered) => {
+      state.renderedFrameCache.set(frame.frameKey, rendered);
+      return rendered;
+    })
+    .finally(() => {
+      state.pendingRenderedFramePromises.delete(frame.frameKey);
+    });
+  state.pendingRenderedFramePromises.set(frame.frameKey, renderPromise);
+  return renderPromise;
+}
+
+function scheduleCacheWarmup() {
+  if (cancelPendingCacheWarmup || !state.assetBundle || timeline.getState().isPlaying) {
+    return;
+  }
+  cancelPendingCacheWarmup = scheduleIdleWork({
+    callback: () => {
+      cancelPendingCacheWarmup = null;
+      if (!state.assetBundle || timeline.getState().isPlaying) {
+        return;
+      }
+      const nextFrame = state.frames.find(
+        (frame) => !state.renderedFrameCache.has(frame.frameKey)
+      );
+      if (!nextFrame) {
+        return;
+      }
+      void ensureRenderedFrame(nextFrame).finally(() => {
+        scheduleCacheWarmup();
+      });
+    }
+  });
+}
+
+function pauseCacheWarmupForInteraction() {
+  stopCacheWarmup();
+  if (cacheWarmupResumeTimerId !== null) {
+    clearTimeout(cacheWarmupResumeTimerId);
+  }
+  cacheWarmupResumeTimerId = window.setTimeout(() => {
+    cacheWarmupResumeTimerId = null;
+    scheduleCacheWarmup();
+  }, 300);
+}
+
+function stopCacheWarmup() {
+  cancelPendingCacheWarmup?.();
+  cancelPendingCacheWarmup = null;
+  if (cacheWarmupResumeTimerId !== null) {
+    clearTimeout(cacheWarmupResumeTimerId);
+    cacheWarmupResumeTimerId = null;
+  }
 }
 
 function refreshMeta() {
@@ -522,13 +735,23 @@ function formatRange(dataPackage: BrowserRainDataPackage | null) {
 }
 
 function resetFrames() {
+  if (pendingRenderFrameId !== null) {
+    cancelAnimationFrame(pendingRenderFrameId);
+    pendingRenderFrameId = null;
+  }
+  stopCacheWarmup();
+  pendingForceRender = false;
   state.frames = [];
   state.totalFrames = 0;
+  state.renderedFrameCache.clear();
+  state.pendingRenderedFramePromises.clear();
   perfReporter.reset();
   timeline.pause();
   timeline.setFrames([]);
   state.lastRenderedFrameKey = null;
   canvasPlaceholder.hidden = false;
+  canvas.style.width = "";
+  canvas.style.height = "";
   byId("frame-count").textContent = "-";
   byId("current-frame-elapsed").textContent = formatFrameElapsed();
 }

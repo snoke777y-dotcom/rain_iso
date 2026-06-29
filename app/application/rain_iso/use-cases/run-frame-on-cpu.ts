@@ -37,27 +37,44 @@ export async function runFrameOnCpu(
       hardAnchorBonus?: number;
       expansionOffset?: number;
     };
+    assetCaches?: {
+      stationMetaById?: ReadonlyMap<
+        string,
+        {
+          station_id: string | number;
+          lon: number;
+          lat: number;
+        }
+      >;
+      validStationIds?: Set<string>;
+      gridIdByStationId?: ReadonlyMap<string, number>;
+    };
     smoothConfig?: {
       rounds?: number;
       softObsMaxDelta?: number;
     };
   }
 ) {
-  const observations = buildFrameObservations(frame, options.assets);
+  const observations = buildFrameObservations(frame, {
+    ...options.assets,
+    stationMetaById: options.assetCaches?.stationMetaById
+  });
+  const validStationIds =
+    options.assetCaches?.validStationIds ??
+    new Set(options.assets.stationMeta.stations.map((station) => String(station.station_id)));
   const { effectiveStations } = buildEffectiveStations(observations, {
     frameType: frame.frameType,
     fallbackNeighborStationIdsByStationId:
       options.assets.fallbackNeighborStationIdsByStationId,
-    validStationIds: new Set(
-      options.assets.stationMeta.stations.map((station) => String(station.station_id))
-    )
+    validStationIds
   });
   const anchorSets = buildAnchorSets(effectiveStations, {
     frameType: frame.frameType,
     fixedAnchorStationIds: options.assets.fixedAnchorStationIds
   });
   const seedGrid = buildSeedGrid(anchorSets, {
-    assets: options.assets
+    assets: options.assets,
+    gridIdByStationId: options.assetCaches?.gridIdByStationId
   });
   const maskResult = buildRainMask({
     frameType: frame.frameType,

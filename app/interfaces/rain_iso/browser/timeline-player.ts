@@ -6,13 +6,19 @@ export function createTimelinePlayer(options: {
   intervalMs?: number;
 } = {}): TimelinePlayer {
   const intervalMs = options.intervalMs ?? 500;
+  const playbackDelayMsByRate: Record<number, number> = {
+    1: 1000,
+    2: 500,
+    3: 100
+  };
   const state: TimelinePlaybackState = {
     frames: [...(options.frames ?? [])],
     currentIndex: 0,
     currentFrame: options.frames?.[0] ?? null,
-    isPlaying: false
+    isPlaying: false,
+    playbackRate: 1
   };
-  let timer: ReturnType<typeof setInterval> | null = null;
+  let timer: ReturnType<typeof setTimeout> | null = null;
   const listeners = new Set<(state: TimelinePlaybackState) => void>();
 
   const emit = () => {
@@ -20,7 +26,8 @@ export function createTimelinePlayer(options: {
       frames: [...state.frames],
       currentIndex: state.currentIndex,
       currentFrame: state.currentFrame,
-      isPlaying: state.isPlaying
+      isPlaying: state.isPlaying,
+      playbackRate: state.playbackRate
     };
     for (const listener of listeners) {
       listener(snapshot);
@@ -35,18 +42,37 @@ export function createTimelinePlayer(options: {
 
   const stopTimer = () => {
     if (timer !== null) {
-      clearInterval(timer);
+      clearTimeout(timer);
       timer = null;
     }
   };
 
-  return {
+  const scheduleNextTick = () => {
+    stopTimer();
+    if (!state.isPlaying || state.frames.length <= 1) {
+      return;
+    }
+    const delayMs = playbackDelayMsByRate[state.playbackRate] ?? intervalMs / state.playbackRate;
+    timer = setTimeout(() => {
+      timer = null;
+      if (!state.isPlaying) {
+        return;
+      }
+      const nextFrame = api.next();
+      if (nextFrame && state.isPlaying) {
+        scheduleNextTick();
+      }
+    }, delayMs);
+  };
+
+  const api: TimelinePlayer = {
     getState() {
       return {
         frames: [...state.frames],
         currentIndex: state.currentIndex,
         currentFrame: state.currentFrame,
-        isPlaying: state.isPlaying
+        isPlaying: state.isPlaying,
+        playbackRate: state.playbackRate
       };
     },
     subscribe(listener) {
@@ -63,6 +89,8 @@ export function createTimelinePlayer(options: {
       if (nextFrames.length === 0) {
         state.currentIndex = 0;
         state.currentFrame = null;
+        state.isPlaying = false;
+        stopTimer();
         emit();
         return;
       }
@@ -75,6 +103,9 @@ export function createTimelinePlayer(options: {
           ? preservedIndex
           : Math.min(state.currentIndex, nextFrames.length - 1);
       syncCurrentFrame();
+      if (state.isPlaying) {
+        scheduleNextTick();
+      }
     },
     selectFrame(index) {
       if (state.frames.length === 0) {
@@ -104,17 +135,30 @@ export function createTimelinePlayer(options: {
         (state.currentIndex - 1 + state.frames.length) % state.frames.length
       );
     },
+    setPlaybackRate(playbackRate) {
+      if (!Number.isFinite(playbackRate) || playbackRate <= 0) {
+        return;
+      }
+      state.playbackRate = playbackRate;
+      emit();
+      if (state.isPlaying) {
+        scheduleNextTick();
+      }
+    },
     play() {
-      if (state.isPlaying || state.frames.length <= 1) {
-        state.isPlaying = state.frames.length > 1;
+      if (state.frames.length <= 1) {
+        state.isPlaying = false;
+        emit();
+        return;
+      }
+      if (state.isPlaying) {
+        scheduleNextTick();
         emit();
         return;
       }
       state.isPlaying = true;
       emit();
-      timer = setInterval(() => {
-        this.next();
-      }, intervalMs);
+      scheduleNextTick();
     },
     pause() {
       state.isPlaying = false;
@@ -131,4 +175,6 @@ export function createTimelinePlayer(options: {
       listeners.clear();
     }
   };
+
+  return api;
 }

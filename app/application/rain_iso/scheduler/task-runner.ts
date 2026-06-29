@@ -86,6 +86,19 @@ export async function runTaskFrames(options: {
   const totalFrames = scheduledFrames.length;
   const taskStartedAt = now();
   const metrics = createMetricsCollector();
+  const stationMetaById = new Map(
+    options.assets.stationMeta.stations.map((station) => [
+      String(station.station_id),
+      station
+    ])
+  );
+  const validStationIds = new Set(stationMetaById.keys());
+  const gridIdByStationId = new Map(
+    options.assets.stationMeta.stations.map((station, index) => [
+      String(station.station_id),
+      options.assets.stationToGrid[index]
+    ])
+  );
   let completedFrames = 0;
   let frameBackend = options.selectedBackend;
 
@@ -124,7 +137,12 @@ export async function runTaskFrames(options: {
     const frameResult = await runFrameOnCpu(frame, {
       assets: options.assets,
       selectedBackend: frameBackend,
-      rainMaskRadiusConfig: options.rainMaskRadiusConfig
+      rainMaskRadiusConfig: options.rainMaskRadiusConfig,
+      assetCaches: {
+        stationMetaById,
+        validStationIds,
+        gridIdByStationId
+      }
     });
     frameBackend = frameResult.selectedBackend;
     frameResult.summary.elapsedMs = now() - frameStartedAt;

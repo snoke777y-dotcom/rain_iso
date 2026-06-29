@@ -4,14 +4,25 @@ import type { StationObservation } from "../preprocess/types.js";
 
 export function buildFrameObservations(
   frame: DirectFrame,
-  options: Pick<RainIsoAssetBundle, "stationMeta">
+  options: Pick<RainIsoAssetBundle, "stationMeta"> & {
+    stationMetaById?: ReadonlyMap<
+      string,
+      {
+        station_id: string | number;
+        lon: number;
+        lat: number;
+      }
+    >;
+  }
 ): StationObservation[] {
-  const stationMetaById = new Map(
-    options.stationMeta.stations.map((station) => [
-      String(station.station_id),
-      station
-    ])
-  );
+  const stationMetaById =
+    options.stationMetaById ??
+    new Map(
+      options.stationMeta.stations.map((station) => [
+        String(station.station_id),
+        station
+      ])
+    );
 
   return frame.stationIds.flatMap((stationId, index) => {
     const stationMeta = stationMetaById.get(stationId);

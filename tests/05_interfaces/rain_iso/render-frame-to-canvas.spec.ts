@@ -2,7 +2,9 @@ import { describe, expect, it } from "vitest";
 
 import { FrameType, LegendId, type FrameResult } from "../../../app/domain/rain_iso/models.js";
 import {
+  drawRenderedFrameToCanvas,
   loadAssetBundleFromDirectory,
+  renderFrameToImageData,
   renderFrameToCanvas
 } from "../../../app/interfaces/rain_iso/browser/index.js";
 import { createSampleBrowserAssetFiles } from "../../helpers/rain_iso_browser_fixtures.js";
@@ -51,6 +53,49 @@ describe("renderFrameToCanvas", () => {
     expect(canvas.width).toBeGreaterThan(0);
     expect(canvas.height).toBeGreaterThan(0);
     expect(calls).toHaveLength(1);
+  });
+
+  it("支持复用已生成的图像数据重复写回 canvas", async () => {
+    if (!("ImageData" in globalThis)) {
+      class TestImageData {
+        constructor(
+          public readonly data: Uint8ClampedArray,
+          public readonly width: number,
+          public readonly height: number
+        ) {}
+      }
+      Object.assign(globalThis, { ImageData: TestImageData });
+    }
+
+    const assets = await loadAssetBundleFromDirectory({
+      files: createSampleBrowserAssetFiles().files
+    });
+    const canvas = {
+      width: 0,
+      height: 0,
+      getContext() {
+        return {
+          putImageData() {}
+        };
+      }
+    };
+
+    const rendered = renderFrameToImageData({
+      frame: createFrameResult(),
+      assets,
+      pixelScale: 2
+    });
+
+    const result = drawRenderedFrameToCanvas({
+      renderedFrame: rendered,
+      canvas
+    });
+
+    expect(result.frameKey).toBe(rendered.frameKey);
+    expect(result.width).toBe(rendered.width);
+    expect(result.height).toBe(rendered.height);
+    expect(canvas.width).toBe(rendered.width);
+    expect(canvas.height).toBe(rendered.height);
   });
 });
 

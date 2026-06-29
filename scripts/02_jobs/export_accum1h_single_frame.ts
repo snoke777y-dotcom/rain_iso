@@ -51,7 +51,7 @@ async function main() {
     throw new Error(`未找到时次 ${frameTime}`);
   }
 
-  const frameResult = runFrameOnCpu(frame, {
+  const frameResult = await runFrameOnCpu(frame, {
     assets,
     selectedBackend: "cpu",
     smoothConfig: {

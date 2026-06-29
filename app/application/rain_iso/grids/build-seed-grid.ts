@@ -25,6 +25,7 @@ export function buildSeedGrid(
       RainIsoAssetBundle,
       "manifest" | "gridMeta" | "stationMeta" | "stationToGrid"
     >;
+    gridIdByStationId?: ReadonlyMap<string, number>;
   }
 ): SeedGridResult {
   const gridCount = options.assets.manifest.grid_count;
@@ -32,20 +33,27 @@ export function buildSeedGrid(
   const hardAnchorMask = new Uint8Array(gridCount);
   const softObsMask = new Uint8Array(gridCount);
 
-  const fixedAnchorStations = mapStationsToGrid(anchorSets.fixedAnchorStations, options.assets).map(
-    (station) => ({
-      ...station,
-      kind: AnchorKind.CoreGuard
-    })
-  );
+  const fixedAnchorStations = mapStationsToGrid(anchorSets.fixedAnchorStations, {
+    ...options.assets,
+    gridIdByStationId: options.gridIdByStationId
+  }).map((station) => ({
+    ...station,
+    kind: AnchorKind.CoreGuard
+  }));
   const dynamicAnchorStations = mapStationsToGrid(
     anchorSets.dynamicAnchorStations,
-    options.assets
+    {
+      ...options.assets,
+      gridIdByStationId: options.gridIdByStationId
+    }
   ).map((station) => ({
     ...station,
     kind: AnchorKind.DynamicTop30
   }));
-  const ordinaryStations = mapStationsToGrid(anchorSets.ordinaryStations, options.assets);
+  const ordinaryStations = mapStationsToGrid(anchorSets.ordinaryStations, {
+    ...options.assets,
+    gridIdByStationId: options.gridIdByStationId
+  });
 
   const hardAnchorByGrid = new Map<number, MappedAnchorStation>();
   for (const station of [...fixedAnchorStations, ...dynamicAnchorStations]) {

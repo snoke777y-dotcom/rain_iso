@@ -1,14 +1,21 @@
-import { RENDER_THRESHOLD_MM } from "../../../domain/rain_iso/constants.js";
 import { resolveLegendBin } from "../../../domain/rain_iso/legend.js";
+import { RENDER_THRESHOLD_MM } from "../../../domain/rain_iso/constants.js";
 import type { GridMetaColumns } from "../../../infrastructure/rain_iso/assets/asset-types.js";
 import type { FrameResult } from "../../../domain/rain_iso/models.js";
 import { buildColorRamp } from "./build-color-ramp.js";
+
+export type GridIndexLookup = {
+  width: number;
+  height: number;
+  cells: Int32Array;
+};
 
 type RenderSampleField = {
   valueGrid: Float32Array;
   rainMask: Uint8Array;
   transitionValueGrid?: Float32Array;
   transitionMask?: Uint8Array;
+  isolatedSpotCoreMask?: Uint8Array;
 };
 
 export function renderGridLayer(options: {
@@ -25,14 +32,7 @@ export function renderGridLayer(options: {
   const height = (sourceHeight - 1) * pixelScale + 1;
   const pixels = new Uint8ClampedArray(width * height * 4);
   const legend = buildColorRamp(options.frameResult.frameType);
-  const displayBoundary = resolveDisplayBoundary(options.renderBoundary);
-  const gridIndexByCell = new Map<string, number>();
-
-  for (let gridIndex = 0; gridIndex < options.gridMeta.gridId.length; gridIndex += 1) {
-    const row = options.gridMeta.row[gridIndex];
-    const col = options.gridMeta.col[gridIndex];
-    gridIndexByCell.set(toCellKey(row, col), gridIndex);
-  }
+  const gridIndexByCell = createGridIndexLookup(options.gridMeta, sourceWidth, sourceHeight);
 
   const renderField: RenderSampleField =
     pixelScale > 1
@@ -59,27 +59,20 @@ export function renderGridLayer(options: {
         baseRainMask: options.frameResult.rainMask,
         transitionValueGrid: renderField.transitionValueGrid,
         transitionMask: renderField.transitionMask,
+        isolatedSpotCoreMask: renderField.isolatedSpotCoreMask,
         gridIndexByCell,
         sourceRow: row / pixelScale,
         sourceCol: col / pixelScale,
         legend,
         pixelScale
       });
-      const bin = resolveLegendBin(
-        {
-          legendId: options.frameResult.legendId,
-          productType: options.frameResult.frameType,
-          bins: legend
-        },
-        value
-      );
-      if (!bin) {
+      const binIndex = resolveBinIndex(legend, value);
+      if (binIndex < 0) {
         continue;
       }
 
       const pixelOffset = (row * width + col) * 4;
-      const rampEntry = legend.find((entry) => entry.color === bin.color);
-      const rgba = rampEntry?.rgba ?? [0, 0, 0, 0];
+      const rgba = legend[binIndex].rgba;
       pixels[pixelOffset] = rgba[0];
       pixels[pixelOffset + 1] = rgba[1];
       pixels[pixelOffset + 2] = rgba[2];
@@ -98,6 +91,21 @@ export function renderGridLayer(options: {
       gridIndexByCell,
       rainMask: renderField.rainMask,
       valueGrid: renderField.valueGrid,
+      isolatedSpotCoreMask: renderField.isolatedSpotCoreMask,
+      legend,
+      legendId: options.frameResult.legendId,
+      frameType: options.frameResult.frameType
+    });
+    fillVisibleCenterHoles({
+      pixels,
+      width,
+      height,
+      pixelScale,
+      sourceWidth,
+      sourceHeight,
+      valueGrid: options.frameResult.valueGrid,
+      rainMask: options.frameResult.rainMask,
+      gridIndexByCell,
       legend,
       legendId: options.frameResult.legendId,
       frameType: options.frameResult.frameType
@@ -110,7 +118,7 @@ export function renderGridLayer(options: {
     height,
     pixelScale,
     gridMeta: options.gridMeta,
-    renderBoundary: displayBoundary,
+    renderBoundary: options.renderBoundary,
     gridResolutionM: options.gridResolutionM
   });
 
@@ -127,7 +135,7 @@ export function renderGridLayer(options: {
       return pixels.slice(offset, offset + 4);
     },
     queryGridValue(row: number, col: number) {
-      const gridIndex = gridIndexByCell.get(toCellKey(row, col));
+      const gridIndex = lookupGridIndex(gridIndexByCell, row, col);
       if (gridIndex === undefined) {
         return null;
       }
@@ -141,27 +149,41 @@ export function renderGridLayer(options: {
   };
 }
 
-function resolveDisplayBoundary(renderBoundary?: Record<string, unknown>) {
-  if (!renderBoundary) {
-    return undefined;
+export function createGridIndexLookup(
+  gridMeta: Pick<GridMetaColumns, "row" | "col">,
+  width: number,
+  height: number
+): GridIndexLookup {
+  const cells = new Int32Array(width * height);
+  cells.fill(-1);
+  for (let gridIndex = 0; gridIndex < gridMeta.row.length; gridIndex += 1) {
+    const row = gridMeta.row[gridIndex];
+    const col = gridMeta.col[gridIndex];
+    if (row < 0 || row >= height || col < 0 || col >= width) {
+      continue;
+    }
+    cells[row * width + col] = gridIndex;
   }
-
-  const features = Array.isArray((renderBoundary as { features?: unknown[] }).features)
-    ? (renderBoundary as { features: Array<Record<string, unknown>> }).features
-    : [];
-  const cityFeatures = features.filter((feature) => isBeijingFeature(feature));
-  if (cityFeatures.length === 0) {
-    return renderBoundary;
-  }
-
   return {
-    ...renderBoundary,
-    features: cityFeatures
+    width,
+    height,
+    cells
   };
 }
 
-function toCellKey(row: number, col: number) {
-  return `${row}:${col}`;
+export function lookupGridIndex(
+  lookup: GridIndexLookup,
+  row: number,
+  col: number
+) {
+  if (!Number.isInteger(row) || !Number.isInteger(col)) {
+    return undefined;
+  }
+  if (row < 0 || row >= lookup.height || col < 0 || col >= lookup.width) {
+    return undefined;
+  }
+  const gridIndex = lookup.cells[row * lookup.width + col];
+  return gridIndex >= 0 ? gridIndex : undefined;
 }
 
 function sampleInterpolatedValue(options: {
@@ -171,7 +193,8 @@ function sampleInterpolatedValue(options: {
   baseRainMask: Uint8Array;
   transitionValueGrid?: Float32Array;
   transitionMask?: Uint8Array;
-  gridIndexByCell: Map<string, number>;
+  isolatedSpotCoreMask?: Uint8Array;
+  gridIndexByCell: GridIndexLookup;
   sourceRow: number;
   sourceCol: number;
   legend: ReturnType<typeof buildColorRamp>;
@@ -179,7 +202,7 @@ function sampleInterpolatedValue(options: {
 }) {
   const exactGridIndex =
     Number.isInteger(options.sourceRow) && Number.isInteger(options.sourceCol)
-      ? options.gridIndexByCell.get(toCellKey(options.sourceRow, options.sourceCol))
+      ? lookupGridIndex(options.gridIndexByCell, options.sourceRow, options.sourceCol)
       : undefined;
   if (exactGridIndex !== undefined) {
     if (options.pixelScale === 1) {
@@ -196,6 +219,10 @@ function sampleInterpolatedValue(options: {
       return Number.NaN;
     }
 
+    if (options.isolatedSpotCoreMask?.[exactGridIndex] === 1) {
+      return options.valueGrid[exactGridIndex];
+    }
+
     return sampleGridCenterBlendedValue(options);
   }
 
@@ -209,17 +236,22 @@ function smoothGridCenterPixels(options: {
   pixelScale: number;
   sourceWidth: number;
   sourceHeight: number;
-  gridIndexByCell: Map<string, number>;
+  gridIndexByCell: GridIndexLookup;
   rainMask: Uint8Array;
   valueGrid: Float32Array;
+  isolatedSpotCoreMask?: Uint8Array;
   legend: ReturnType<typeof buildColorRamp>;
   legendId: FrameResult["legendId"];
   frameType: FrameResult["frameType"];
 }) {
   for (let sourceRow = 0; sourceRow < options.sourceHeight; sourceRow += 1) {
     for (let sourceCol = 0; sourceCol < options.sourceWidth; sourceCol += 1) {
-      const gridIndex = options.gridIndexByCell.get(toCellKey(sourceRow, sourceCol));
+      const gridIndex = lookupGridIndex(options.gridIndexByCell, sourceRow, sourceCol);
       if (gridIndex === undefined || options.rainMask[gridIndex] !== 1) {
+        continue;
+      }
+
+      if (options.isolatedSpotCoreMask?.[gridIndex] === 1) {
         continue;
       }
 
@@ -249,6 +281,28 @@ function smoothGridCenterPixels(options: {
       }
 
       const centerOffset = (pixelRow * options.width + pixelCol) * 4;
+      if (options.pixels[replacementOffset + 3] === 0) {
+        const bin = resolveLegendBin(
+          {
+            legendId: options.legendId,
+            productType: options.frameType,
+            bins: options.legend
+          },
+          options.valueGrid[gridIndex]
+        );
+        if (!bin) {
+          continue;
+        }
+
+        const rampEntry = options.legend.find((entry) => entry.color === bin.color);
+        const rgba = rampEntry?.rgba ?? [0, 0, 0, 0];
+        options.pixels[centerOffset] = rgba[0];
+        options.pixels[centerOffset + 1] = rgba[1];
+        options.pixels[centerOffset + 2] = rgba[2];
+        options.pixels[centerOffset + 3] = rgba[3];
+        continue;
+      }
+
       options.pixels[centerOffset] = options.pixels[replacementOffset];
       options.pixels[centerOffset + 1] = options.pixels[replacementOffset + 1];
       options.pixels[centerOffset + 2] = options.pixels[replacementOffset + 2];
@@ -282,6 +336,174 @@ function pickCenterReplacementOffset(options: {
   return null;
 }
 
+function fillVisibleCenterHoles(options: {
+  pixels: Uint8ClampedArray;
+  width: number;
+  height: number;
+  pixelScale: number;
+  sourceWidth: number;
+  sourceHeight: number;
+  valueGrid: Float32Array;
+  rainMask: Uint8Array;
+  gridIndexByCell: GridIndexLookup;
+  legend: ReturnType<typeof buildColorRamp>;
+  legendId: FrameResult["legendId"];
+  frameType: FrameResult["frameType"];
+}) {
+  for (let sourceRow = 0; sourceRow < options.sourceHeight; sourceRow += 1) {
+    for (let sourceCol = 0; sourceCol < options.sourceWidth; sourceCol += 1) {
+      const pixelRow = sourceRow * options.pixelScale;
+      const pixelCol = sourceCol * options.pixelScale;
+      const centerOffset = (pixelRow * options.width + pixelCol) * 4;
+      if (options.pixels[centerOffset + 3] !== 0) {
+        continue;
+      }
+
+      const gridIndex = lookupGridIndex(options.gridIndexByCell, sourceRow, sourceCol);
+      const replacement = pickVisibleHoleReplacement({
+        pixels: options.pixels,
+        width: options.width,
+        height: options.height,
+        pixelRow,
+        pixelCol,
+        ownValue:
+          gridIndex !== undefined && options.rainMask[gridIndex] === 1
+            ? options.valueGrid[gridIndex]
+            : Number.NaN,
+        legend: options.legend,
+        legendId: options.legendId,
+        frameType: options.frameType
+      });
+      if (!replacement) {
+        continue;
+      }
+
+      options.pixels[centerOffset] = replacement[0];
+      options.pixels[centerOffset + 1] = replacement[1];
+      options.pixels[centerOffset + 2] = replacement[2];
+      options.pixels[centerOffset + 3] = replacement[3];
+    }
+  }
+}
+
+function pickVisibleHoleReplacement(options: {
+  pixels: Uint8ClampedArray;
+  width: number;
+  height: number;
+  pixelRow: number;
+  pixelCol: number;
+  ownValue: number;
+  legend: ReturnType<typeof buildColorRamp>;
+  legendId: FrameResult["legendId"];
+  frameType: FrameResult["frameType"];
+}) {
+  const candidates = new Map<
+    string,
+    {
+      rgba: [number, number, number, number];
+      offsets: Array<[number, number]>;
+    }
+  >();
+  let visibleNeighborCount = 0;
+
+  for (let rowOffset = -1; rowOffset <= 1; rowOffset += 1) {
+    for (let colOffset = -1; colOffset <= 1; colOffset += 1) {
+      if (rowOffset === 0 && colOffset === 0) {
+        continue;
+      }
+
+      const row = options.pixelRow + rowOffset;
+      const col = options.pixelCol + colOffset;
+      if (row < 0 || row >= options.height || col < 0 || col >= options.width) {
+        continue;
+      }
+
+      const offset = (row * options.width + col) * 4;
+      const alpha = options.pixels[offset + 3];
+      if (alpha === 0) {
+        continue;
+      }
+
+      const red = options.pixels[offset];
+      const green = options.pixels[offset + 1];
+      const blue = options.pixels[offset + 2];
+      if (red === 0 && green === 0 && blue === 0) {
+        continue;
+      }
+
+      visibleNeighborCount += 1;
+      const key = `${red},${green},${blue},${alpha}`;
+      const current = candidates.get(key);
+      if (current) {
+        current.offsets.push([rowOffset, colOffset]);
+        continue;
+      }
+
+      candidates.set(key, {
+        rgba: [red, green, blue, alpha],
+        offsets: [[rowOffset, colOffset]]
+      });
+    }
+  }
+
+  let replacement: [number, number, number, number] | null = null;
+  let maxCount = 0;
+  for (const candidate of candidates.values()) {
+    if (!hasAdjacentVisiblePair(candidate.offsets)) {
+      continue;
+    }
+    if (candidate.offsets.length > maxCount) {
+      maxCount = candidate.offsets.length;
+      replacement = candidate.rgba;
+    }
+  }
+
+  if (maxCount < 2) {
+    if (visibleNeighborCount < 2) {
+      return null;
+    }
+    return resolveOwnValueColor(options);
+  }
+
+  return replacement;
+}
+
+function resolveOwnValueColor(options: {
+  ownValue: number;
+  legend: ReturnType<typeof buildColorRamp>;
+  legendId: FrameResult["legendId"];
+  frameType: FrameResult["frameType"];
+}) {
+  const bin = resolveLegendBin(
+    {
+      legendId: options.legendId,
+      productType: options.frameType,
+      bins: options.legend
+    },
+    options.ownValue
+  );
+  if (!bin) {
+    return null;
+  }
+
+  const rampEntry = options.legend.find((entry) => entry.color === bin.color);
+  return (rampEntry?.rgba ?? null) as [number, number, number, number] | null;
+}
+
+function hasAdjacentVisiblePair(offsets: Array<[number, number]>) {
+  for (let index = 0; index < offsets.length; index += 1) {
+    for (let compareIndex = index + 1; compareIndex < offsets.length; compareIndex += 1) {
+      const [rowA, colA] = offsets[index];
+      const [rowB, colB] = offsets[compareIndex];
+      if (Math.max(Math.abs(rowA - rowB), Math.abs(colA - colB)) <= 1) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
 function sampleGridCenterBlendedValue(options: {
   valueGrid: Float32Array;
   rainMask: Uint8Array;
@@ -289,7 +511,8 @@ function sampleGridCenterBlendedValue(options: {
   baseRainMask: Uint8Array;
   transitionValueGrid?: Float32Array;
   transitionMask?: Uint8Array;
-  gridIndexByCell: Map<string, number>;
+  isolatedSpotCoreMask?: Uint8Array;
+  gridIndexByCell: GridIndexLookup;
   sourceRow: number;
   sourceCol: number;
   legend: ReturnType<typeof buildColorRamp>;
@@ -332,12 +555,21 @@ function sampleInterpolatedValueOffCenter(options: {
   baseRainMask: Uint8Array;
   transitionValueGrid?: Float32Array;
   transitionMask?: Uint8Array;
-  gridIndexByCell: Map<string, number>;
+  isolatedSpotCoreMask?: Uint8Array;
+  gridIndexByCell: GridIndexLookup;
   sourceRow: number;
   sourceCol: number;
   legend: ReturnType<typeof buildColorRamp>;
   pixelScale: number;
 }) {
+  const isolatedSpotValue = sampleIsolatedSpotValue(options);
+  if (Number.isFinite(isolatedSpotValue)) {
+    return isolatedSpotValue;
+  }
+  if (hasNearbyIsolatedSpotCore(options)) {
+    return Number.NaN;
+  }
+
   const baseRow = Math.floor(options.sourceRow);
   const baseCol = Math.floor(options.sourceCol);
   const nextRow = Math.ceil(options.sourceRow);
@@ -372,7 +604,7 @@ function sampleInterpolatedValueOffCenter(options: {
       continue;
     }
 
-    const gridIndex = options.gridIndexByCell.get(toCellKey(corner.row, corner.col));
+    const gridIndex = lookupGridIndex(options.gridIndexByCell, corner.row, corner.col);
     if (gridIndex === undefined) {
       continue;
     }
@@ -728,11 +960,6 @@ function webMercatorToLonLat(x: number, y: number) {
   return { lon, lat };
 }
 
-function isBeijingFeature(feature: Record<string, unknown>) {
-  const properties = (feature.properties ?? {}) as Record<string, unknown>;
-  return properties.xzqhdm === "110000" || properties.adcode === 110000;
-}
-
 function drawLine(
   pixels: Uint8ClampedArray,
   width: number,
@@ -790,11 +1017,14 @@ const ISOLATED_LOW_BIN_MAX_INDEX = 1;
 const ISOLATED_PATCH_MAX_CELLS = 3;
 const ISOLATED_SUPPORT_RADIUS = 2;
 const STRONGER_SUPPORT_RADIUS = 2;
+const EXPANDED_PATCH_MAX_SOURCE_SUPPORT_CELLS = 8;
+const EXPANDED_PATCH_MIN_EXPANSION_FACTOR = 4;
+const EXPANDED_PATCH_LARGE_SUPPORT_SPARSE_FACTOR = 64;
 
 function buildBridgeRenderField(options: {
   frameResult: FrameResult;
   gridMeta: GridMetaColumns;
-  gridIndexByCell: Map<string, number>;
+  gridIndexByCell: GridIndexLookup;
   legend: ReturnType<typeof buildColorRamp>;
 }) {
   const valueGrid = new Float32Array(options.frameResult.valueGrid);
@@ -854,9 +1084,7 @@ function buildBridgeRenderField(options: {
           continue;
         }
 
-        const targetGridIndex = options.gridIndexByCell.get(
-          toCellKey(row + rowOffset, col + colOffset)
-        );
+        const targetGridIndex = lookupGridIndex(options.gridIndexByCell, row + rowOffset, col + colOffset);
         if (
           targetGridIndex === undefined ||
           targetGridIndex <= gridIndex ||
@@ -900,6 +1128,14 @@ function buildBridgeRenderField(options: {
     gridMeta: options.gridMeta,
     gridIndexByCell: options.gridIndexByCell
   });
+  collapseSparseObservationExpandedPatches({
+    rainMask,
+    hardAnchorMask: options.frameResult.hardAnchorMask,
+    softObsMask: options.frameResult.softObsMask,
+    binIndexByGrid,
+    gridMeta: options.gridMeta,
+    gridIndexByCell: options.gridIndexByCell
+  });
   const transitionField = buildSmallPatchTransitionField({
     valueGrid,
     rainMask,
@@ -912,7 +1148,8 @@ function buildBridgeRenderField(options: {
     valueGrid,
     rainMask,
     transitionValueGrid: transitionField.valueGrid,
-    transitionMask: transitionField.rainMask
+    transitionMask: transitionField.rainMask,
+    isolatedSpotCoreMask: transitionField.isolatedSpotCoreMask
   };
 }
 
@@ -920,11 +1157,12 @@ function buildSmallPatchTransitionField(options: {
   valueGrid: Float32Array;
   rainMask: Uint8Array;
   gridMeta: GridMetaColumns;
-  gridIndexByCell: Map<string, number>;
+  gridIndexByCell: GridIndexLookup;
   legend: ReturnType<typeof buildColorRamp>;
 }) {
   const transitionValueGrid = new Float32Array(options.valueGrid.length);
   const transitionMask = new Uint8Array(options.valueGrid.length);
+  const isolatedSpotCoreMask = new Uint8Array(options.valueGrid.length);
   const visited = new Uint8Array(options.rainMask.length);
 
   for (let gridIndex = 0; gridIndex < options.rainMask.length; gridIndex += 1) {
@@ -943,6 +1181,11 @@ function buildSmallPatchTransitionField(options: {
       continue;
     }
 
+    if (patch.length === 1) {
+      isolatedSpotCoreMask[patch[0]] = 1;
+      continue;
+    }
+
     for (const patchGridIndex of patch) {
       const sourceRow = options.gridMeta.row[patchGridIndex];
       const sourceCol = options.gridMeta.col[patchGridIndex];
@@ -952,9 +1195,7 @@ function buildSmallPatchTransitionField(options: {
             continue;
           }
 
-          const neighborGridIndex = options.gridIndexByCell.get(
-            toCellKey(sourceRow + rowOffset, sourceCol + colOffset)
-          );
+          const neighborGridIndex = lookupGridIndex(options.gridIndexByCell, sourceRow + rowOffset, sourceCol + colOffset);
           if (
             neighborGridIndex === undefined ||
             options.rainMask[neighborGridIndex] === 1
@@ -985,8 +1226,169 @@ function buildSmallPatchTransitionField(options: {
 
   return {
     valueGrid: transitionValueGrid,
-    rainMask: transitionMask
+    rainMask: transitionMask,
+    isolatedSpotCoreMask
   };
+}
+
+function collapseSparseObservationExpandedPatches(options: {
+  rainMask: Uint8Array;
+  hardAnchorMask: Uint8Array;
+  softObsMask: Uint8Array;
+  binIndexByGrid: Int16Array;
+  gridMeta: GridMetaColumns;
+  gridIndexByCell: GridIndexLookup;
+}) {
+  const visited = new Uint8Array(options.rainMask.length);
+
+  for (let gridIndex = 0; gridIndex < options.rainMask.length; gridIndex += 1) {
+    const binIndex = options.binIndexByGrid[gridIndex];
+    if (
+      visited[gridIndex] === 1 ||
+      options.rainMask[gridIndex] !== 1 ||
+      binIndex < 0
+    ) {
+      continue;
+    }
+
+    const patch = collectSameBinPatch({
+      startGridIndex: gridIndex,
+      targetBinIndex: binIndex,
+      visited,
+      rainMask: options.rainMask,
+      binIndexByGrid: options.binIndexByGrid,
+      gridMeta: options.gridMeta,
+      gridIndexByCell: options.gridIndexByCell
+    });
+    if (patch.length <= ISOLATED_PATCH_MAX_CELLS) {
+      continue;
+    }
+
+    let sourceSupportCount = 0;
+    for (const patchGridIndex of patch) {
+      if (
+        options.hardAnchorMask[patchGridIndex] === 1 ||
+        options.softObsMask[patchGridIndex] === 1
+      ) {
+        sourceSupportCount += 1;
+      }
+    }
+    if (
+      sourceSupportCount === 0
+    ) {
+      continue;
+    }
+
+    const minExpansionFactor =
+      sourceSupportCount <= EXPANDED_PATCH_MAX_SOURCE_SUPPORT_CELLS
+        ? EXPANDED_PATCH_MIN_EXPANSION_FACTOR
+        : EXPANDED_PATCH_LARGE_SUPPORT_SPARSE_FACTOR;
+    if (patch.length < sourceSupportCount * minExpansionFactor) {
+      continue;
+    }
+
+    for (const patchGridIndex of patch) {
+      if (
+        options.hardAnchorMask[patchGridIndex] === 1 ||
+        options.softObsMask[patchGridIndex] === 1
+      ) {
+        continue;
+      }
+      options.rainMask[patchGridIndex] = 0;
+      options.binIndexByGrid[patchGridIndex] = -1;
+    }
+  }
+}
+
+function sampleIsolatedSpotValue(options: {
+  valueGrid: Float32Array;
+  rainMask: Uint8Array;
+  baseValueGrid: Float32Array;
+  baseRainMask: Uint8Array;
+  transitionValueGrid?: Float32Array;
+  transitionMask?: Uint8Array;
+  isolatedSpotCoreMask?: Uint8Array;
+  gridIndexByCell: GridIndexLookup;
+  sourceRow: number;
+  sourceCol: number;
+  legend: ReturnType<typeof buildColorRamp>;
+  pixelScale: number;
+}) {
+  if (!options.isolatedSpotCoreMask) {
+    return Number.NaN;
+  }
+
+  const minRow = Math.floor(options.sourceRow) - 1;
+  const maxRow = Math.ceil(options.sourceRow) + 1;
+  const minCol = Math.floor(options.sourceCol) - 1;
+  const maxCol = Math.ceil(options.sourceCol) + 1;
+  let bestValue = Number.NaN;
+  let bestDistance = Number.POSITIVE_INFINITY;
+
+  for (let row = minRow; row <= maxRow; row += 1) {
+    for (let col = minCol; col <= maxCol; col += 1) {
+      const gridIndex = lookupGridIndex(options.gridIndexByCell, row, col);
+      if (
+        gridIndex === undefined ||
+        options.isolatedSpotCoreMask[gridIndex] !== 1
+      ) {
+        continue;
+      }
+
+      const dx = Math.abs(options.sourceCol - col);
+      const dy = Math.abs(options.sourceRow - row);
+      const manhattan = dx + dy;
+      if (manhattan <= 0 || manhattan > 0.75) {
+        continue;
+      }
+
+      const candidateValue = resolvePatchTransitionValue({
+        sourceValue: options.valueGrid[gridIndex],
+        legend: options.legend,
+        distance: manhattan
+      });
+      if (!Number.isFinite(candidateValue)) {
+        continue;
+      }
+
+      if (manhattan < bestDistance || !Number.isFinite(bestValue)) {
+        bestDistance = manhattan;
+        bestValue = candidateValue;
+      }
+    }
+  }
+
+  return bestValue;
+}
+
+function hasNearbyIsolatedSpotCore(options: {
+  isolatedSpotCoreMask?: Uint8Array;
+  gridIndexByCell: GridIndexLookup;
+  sourceRow: number;
+  sourceCol: number;
+}) {
+  if (!options.isolatedSpotCoreMask) {
+    return false;
+  }
+
+  const minRow = Math.floor(options.sourceRow) - 1;
+  const maxRow = Math.ceil(options.sourceRow) + 1;
+  const minCol = Math.floor(options.sourceCol) - 1;
+  const maxCol = Math.ceil(options.sourceCol) + 1;
+
+  for (let row = minRow; row <= maxRow; row += 1) {
+    for (let col = minCol; col <= maxCol; col += 1) {
+      const gridIndex = lookupGridIndex(options.gridIndexByCell, row, col);
+      if (
+        gridIndex !== undefined &&
+        options.isolatedSpotCoreMask[gridIndex] === 1
+      ) {
+        return true;
+      }
+    }
+  }
+
+  return false;
 }
 
 function collectRainPatch(options: {
@@ -994,7 +1396,7 @@ function collectRainPatch(options: {
   visited: Uint8Array;
   rainMask: Uint8Array;
   gridMeta: GridMetaColumns;
-  gridIndexByCell: Map<string, number>;
+  gridIndexByCell: GridIndexLookup;
 }) {
   const patch: number[] = [];
   const queue = [options.startGridIndex];
@@ -1015,9 +1417,7 @@ function collectRainPatch(options: {
           continue;
         }
 
-        const neighborGridIndex = options.gridIndexByCell.get(
-          toCellKey(row + rowOffset, col + colOffset)
-        );
+        const neighborGridIndex = lookupGridIndex(options.gridIndexByCell, row + rowOffset, col + colOffset);
         if (
           neighborGridIndex === undefined ||
           options.visited[neighborGridIndex] === 1 ||
@@ -1090,6 +1490,9 @@ function resolveBinIndex(
   legend: ReturnType<typeof buildColorRamp>,
   value: number
 ): number {
+  if (!Number.isFinite(value) || value < RENDER_THRESHOLD_MM) {
+    return -1;
+  }
   for (let index = 0; index < legend.length; index += 1) {
     const bin = legend[index];
     const inOpenEndedRange = bin.max === null && value >= bin.min;
@@ -1123,7 +1526,7 @@ function sampleCornerPeakValue(options: {
   relativePeakBin: number;
   valueGrid: Float32Array;
   rainMask: Uint8Array;
-  gridIndexByCell: Map<string, number>;
+  gridIndexByCell: GridIndexLookup;
   legend: ReturnType<typeof buildColorRamp>;
 }) {
   let peakWeightedSum = 0;
@@ -1134,7 +1537,7 @@ function sampleCornerPeakValue(options: {
       continue;
     }
 
-    const gridIndex = options.gridIndexByCell.get(toCellKey(corner.row, corner.col));
+    const gridIndex = lookupGridIndex(options.gridIndexByCell, corner.row, corner.col);
     if (gridIndex === undefined || options.rainMask[gridIndex] !== 1) {
       continue;
     }
@@ -1161,7 +1564,7 @@ function hasStrongerNeighborSupport(options: {
   currentBinIndex: number;
   rainMask: Uint8Array;
   valueGrid: Float32Array;
-  gridIndexByCell: Map<string, number>;
+  gridIndexByCell: GridIndexLookup;
   legend: ReturnType<typeof buildColorRamp>;
 }) {
   for (
@@ -1178,9 +1581,7 @@ function hasStrongerNeighborSupport(options: {
         continue;
       }
 
-      const neighborGridIndex = options.gridIndexByCell.get(
-        toCellKey(options.row + rowOffset, options.col + colOffset)
-      );
+      const neighborGridIndex = lookupGridIndex(options.gridIndexByCell, options.row + rowOffset, options.col + colOffset);
       if (
         neighborGridIndex === undefined ||
         options.rainMask[neighborGridIndex] !== 1
@@ -1207,7 +1608,7 @@ function hasComparableNeighborSupport(options: {
   currentBinIndex: number;
   rainMask: Uint8Array;
   valueGrid: Float32Array;
-  gridIndexByCell: Map<string, number>;
+  gridIndexByCell: GridIndexLookup;
   legend: ReturnType<typeof buildColorRamp>;
 }) {
   for (
@@ -1224,9 +1625,7 @@ function hasComparableNeighborSupport(options: {
         continue;
       }
 
-      const neighborGridIndex = options.gridIndexByCell.get(
-        toCellKey(options.row + rowOffset, options.col + colOffset)
-      );
+      const neighborGridIndex = lookupGridIndex(options.gridIndexByCell, options.row + rowOffset, options.col + colOffset);
       if (
         neighborGridIndex === undefined ||
         options.rainMask[neighborGridIndex] !== 1
@@ -1252,7 +1651,7 @@ function suppressIsolatedLowPatches(options: {
   hardAnchorMask: Uint8Array;
   binIndexByGrid: Int16Array;
   gridMeta: GridMetaColumns;
-  gridIndexByCell: Map<string, number>;
+  gridIndexByCell: GridIndexLookup;
 }) {
   const visited = new Uint8Array(options.rainMask.length);
 
@@ -1308,7 +1707,7 @@ function collectSameBinPatch(options: {
   rainMask: Uint8Array;
   binIndexByGrid: Int16Array;
   gridMeta: GridMetaColumns;
-  gridIndexByCell: Map<string, number>;
+  gridIndexByCell: GridIndexLookup;
 }) {
   const patch: number[] = [];
   const queue = [options.startGridIndex];
@@ -1329,9 +1728,7 @@ function collectSameBinPatch(options: {
           continue;
         }
 
-        const neighborGridIndex = options.gridIndexByCell.get(
-          toCellKey(row + rowOffset, col + colOffset)
-        );
+        const neighborGridIndex = lookupGridIndex(options.gridIndexByCell, row + rowOffset, col + colOffset);
         if (
           neighborGridIndex === undefined ||
           options.visited[neighborGridIndex] === 1 ||
@@ -1356,7 +1753,7 @@ function hasNearbyBinSupport(options: {
   rainMask: Uint8Array;
   binIndexByGrid: Int16Array;
   gridMeta: GridMetaColumns;
-  gridIndexByCell: Map<string, number>;
+  gridIndexByCell: GridIndexLookup;
 }) {
   const patchSet = new Set(options.patch);
 
@@ -1377,9 +1774,7 @@ function hasNearbyBinSupport(options: {
           continue;
         }
 
-        const neighborGridIndex = options.gridIndexByCell.get(
-          toCellKey(row + rowOffset, col + colOffset)
-        );
+        const neighborGridIndex = lookupGridIndex(options.gridIndexByCell, row + rowOffset, col + colOffset);
         if (
           neighborGridIndex === undefined ||
           patchSet.has(neighborGridIndex) ||
@@ -1405,7 +1800,7 @@ function sampleLowBinFeatheredValue(options: {
   rainMask: Uint8Array;
   transitionValueGrid?: Float32Array;
   transitionMask?: Uint8Array;
-  gridIndexByCell: Map<string, number>;
+  gridIndexByCell: GridIndexLookup;
   sourceRow: number;
   sourceCol: number;
   legend: ReturnType<typeof buildColorRamp>;
@@ -1438,7 +1833,7 @@ function sampleLowBinFeatheredValue(options: {
     ) {
       const row = centerRow + rowOffset;
       const col = centerCol + colOffset;
-      const gridIndex = options.gridIndexByCell.get(toCellKey(row, col));
+      const gridIndex = lookupGridIndex(options.gridIndexByCell, row, col);
       if (gridIndex === undefined) {
         continue;
       }
@@ -1511,15 +1906,13 @@ function findLocalMaxBinIndex(options: {
   col: number;
   radius: number;
   binIndexByGrid: Int16Array;
-  gridIndexByCell: Map<string, number>;
+  gridIndexByCell: GridIndexLookup;
 }) {
   let maxBinIndex = -1;
 
   for (let rowOffset = -options.radius; rowOffset <= options.radius; rowOffset += 1) {
     for (let colOffset = -options.radius; colOffset <= options.radius; colOffset += 1) {
-      const gridIndex = options.gridIndexByCell.get(
-        toCellKey(options.row + rowOffset, options.col + colOffset)
-      );
+      const gridIndex = lookupGridIndex(options.gridIndexByCell, options.row + rowOffset, options.col + colOffset);
       if (gridIndex === undefined) {
         continue;
       }
@@ -1539,7 +1932,7 @@ function collectBridgePath(options: {
   startCol: number;
   targetRow: number;
   targetCol: number;
-  gridIndexByCell: Map<string, number>;
+  gridIndexByCell: GridIndexLookup;
 }) {
   const path: number[] = [];
   let row = options.startRow;
@@ -1558,7 +1951,7 @@ function collectBridgePath(options: {
       return path;
     }
 
-    const gridIndex = options.gridIndexByCell.get(toCellKey(row, col));
+    const gridIndex = lookupGridIndex(options.gridIndexByCell, row, col);
     if (gridIndex === undefined) {
       return [];
     }

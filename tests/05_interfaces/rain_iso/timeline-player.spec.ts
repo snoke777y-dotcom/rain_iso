@@ -28,10 +28,13 @@ describe("timeline player", () => {
     expect(player.getState().currentIndex).toBe(0);
 
     player.play();
-    vi.advanceTimersByTime(100);
+    vi.advanceTimersByTime(999);
+    expect(player.getState().currentIndex).toBe(0);
+
+    vi.advanceTimersByTime(1);
     expect(player.getState().currentIndex).toBe(1);
 
-    vi.advanceTimersByTime(100);
+    vi.advanceTimersByTime(1000);
     expect(player.getState().currentIndex).toBe(2);
 
     player.pause();
@@ -45,19 +48,45 @@ describe("timeline player", () => {
     const third = createFrameResult("accum_1h_step|2026-06-24T14:00:00+08:00", FrameType.Accum1hStep);
     const player = createTimelinePlayer({
       frames: [first, second],
-      intervalMs: 100
+      intervalMs: 1000
     });
 
     player.play();
-    vi.advanceTimersByTime(100);
+    vi.advanceTimersByTime(1000);
     expect(player.getState().currentFrame?.frameKey).toBe(second.frameKey);
 
     player.setFrames([first, second, third]);
     expect(player.getState().isPlaying).toBe(true);
     expect(player.getState().currentFrame?.frameKey).toBe(second.frameKey);
 
-    vi.advanceTimersByTime(100);
+    vi.advanceTimersByTime(1000);
     expect(player.getState().currentFrame?.frameKey).toBe(third.frameKey);
+  });
+
+  it("支持切换到 2 倍和 3 倍速播放", () => {
+    vi.useFakeTimers();
+    const player = createTimelinePlayer({
+      frames: [
+        createFrameResult("rain_5m|2026-06-24T13:55:00+08:00"),
+        createFrameResult("rain_5m|2026-06-24T14:00:00+08:00"),
+        createFrameResult("rain_5m|2026-06-24T14:05:00+08:00"),
+        createFrameResult("rain_5m|2026-06-24T14:10:00+08:00")
+      ],
+      intervalMs: 1000
+    });
+
+    player.setPlaybackRate(2);
+    player.play();
+    vi.advanceTimersByTime(499);
+    expect(player.getState().currentIndex).toBe(0);
+    vi.advanceTimersByTime(1);
+    expect(player.getState().currentIndex).toBe(1);
+
+    player.setPlaybackRate(3);
+    vi.advanceTimersByTime(99);
+    expect(player.getState().currentIndex).toBe(1);
+    vi.advanceTimersByTime(1);
+    expect(player.getState().currentIndex).toBe(2);
   });
 });
 

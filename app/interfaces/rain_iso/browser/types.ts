@@ -34,6 +34,7 @@ export type TimelinePlaybackState = {
   currentIndex: number;
   currentFrame: import("../../../domain/rain_iso/models.js").FrameResult | null;
   isPlaying: boolean;
+  playbackRate: number;
 };
 
 export type TimelinePlayer = {
@@ -44,6 +45,7 @@ export type TimelinePlayer = {
   selectFrameByKey: (frameKey: string) => import("../../../domain/rain_iso/models.js").FrameResult | null;
   next: () => import("../../../domain/rain_iso/models.js").FrameResult | null;
   previous: () => import("../../../domain/rain_iso/models.js").FrameResult | null;
+  setPlaybackRate: (playbackRate: number) => void;
   play: () => void;
   pause: () => void;
   dispose: () => void;
@@ -93,4 +95,8 @@ export type RenderFrameToCanvasResult = {
   width: number;
   height: number;
   frameKey: string;
+};
+
+export type RenderedFrameImageData = RenderFrameToCanvasResult & {
+  imageData: ImageData;
 };

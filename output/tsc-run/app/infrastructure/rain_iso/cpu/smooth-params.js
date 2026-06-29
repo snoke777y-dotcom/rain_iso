@@ -1,2 +1,0 @@
-export const DEFAULT_SMOOTH_ROUNDS = 12;
-export const DEFAULT_SOFT_OBS_MAX_DELTA = 20;

@@ -121,7 +121,15 @@ export function createRainIsoWorkerClient(
       pendingRequest.handlers?.onFrameReady?.({
         taskId: response.payload.task_id,
         frameKey: response.payload.frame_key,
-        frameResult: response.payload.frame_result
+        frameResult: response.payload.frame_result,
+        renderedFrame: response.payload.rendered_frame
+          ? {
+              frameKey: response.payload.rendered_frame.frame_key,
+              width: response.payload.rendered_frame.width,
+              height: response.payload.rendered_frame.height,
+              pixels: response.payload.rendered_frame.pixels
+            }
+          : undefined
       });
       return;
     }
